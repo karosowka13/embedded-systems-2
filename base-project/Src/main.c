@@ -34,6 +34,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define TIMER_PERIOD 1000
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -168,6 +169,7 @@ int main(void)
 
   /* USER CODE BEGIN RTOS_TIMERS */
   /* start timers, add new ones, ... */
+  osTimerStart(myTimer01Handle, TIMER_PERIOD);
   /* USER CODE END RTOS_TIMERS */
 
   /* USER CODE BEGIN RTOS_QUEUES */
@@ -383,7 +385,10 @@ void StartTask02(void *argument)
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+	  osSemaphoreWait(myBinarySem01Handle, osWaitForever);
+	  LED_turn_on(LED1);
+	  osDelay(500);
+	  LED_turn_off(LED1);
   }
   /* USER CODE END StartTask02 */
 }
@@ -428,7 +433,7 @@ void StartTask04(void *argument)
 void Callback01(void *argument)
 {
   /* USER CODE BEGIN Callback01 */
-  
+  osSemaphoreRelease(myBinarySem01Handle);
   /* USER CODE END Callback01 */
 }
 

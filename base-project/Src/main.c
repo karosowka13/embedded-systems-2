@@ -395,7 +395,7 @@ void StartTask02(void *argument)
   /* Infinite loop */
   for(;;)
   {
-	  osSemaphoreWait(myBinarySem01Handle, osWaitForever);
+	  osSemaphoreAcquire(myBinarySem01Handle, osWaitForever);
 	  LED_turn_on(LED1);
 	  osDelay(500);
 	  LED_turn_off(LED1);

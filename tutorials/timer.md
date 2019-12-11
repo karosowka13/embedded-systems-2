@@ -3,7 +3,7 @@ Ih this tutorial you will learn about [Software Timers](http://www.keil.com/pack
 
 ## The 'WHY' part
 
-In this part you will observe how `foo` influences behaviour of FreeRTOS.
+In this part you will observe how `Software Times` impacts behaviour of FreeRTOS.
 Try to think why this features was implemented and what are possible aplacations.
 
 ### Prequisities
@@ -40,7 +40,7 @@ osTimerStart(myTimer01Handle, TIMER_PERIOD);
 /* USER CODE END RTOS_TIMERS */
 ```
 
-Next, we want to [release](https://www.keil.com/pack/doc/CMSIS/RTOS/html/group__CMSIS__RTOS__SemaphoreMgmt.html#gab108914997c49e14d8ff1ae0d1988ca0) semaphore in order to trigger Task01.
+Next, we want to [release](https://www.keil.com/pack/doc/CMSIS/RTOS2/html/group__CMSIS__RTOS__SemaphoreMgmt.html#ga0abcee1b5449d7a6928fb9248c690bb6) semaphore in order to trigger Task01.
 
 ```c
 /* USER CODE BEGIN Callback01 */
@@ -48,9 +48,9 @@ osSemaphoreRelease(myBinarySem01Handle);
 /* USER CODE END Callback01 */
 ```
 
-In the task02 we want to [wait](https://www.keil.com/pack/doc/CMSIS/RTOS/html/group__CMSIS__RTOS__SemaphoreMgmt.html#gacc15b0fc8ce1167fe43da33042e62098) for semaphore - the task will be trigger by this semaphore. Please note that one can specify wait time.
+In the task02 we want to [acquire](https://www.keil.com/pack/doc/CMSIS/RTOS2/html/group__CMSIS__RTOS__SemaphoreMgmt.html#ga7e94c8b242a0c81f2cc79ec22895c87b) semaphore - the task will be trigger by this semaphore. Please note that one can specify wait time for acquiring semaphore.
 We also call functions to switch diodes in order to indicate task execution time.
-`osDelay` represents any function that is computationally expensive.
+`osDelay` represents any function that is computationally expensive. We call it to see diode switching.
 ```c
 /* USER CODE BEGIN StartTask02 */
 /* Infinite loop */

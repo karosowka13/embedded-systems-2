@@ -1,6 +1,15 @@
 # FreeRTOS demo board
 This project aims to design demo board for teaching principles of [FreeRTOS](https://www.freertos.org/index.html). The demo board can be used i.e. during lectures for quick demonstration of basic features of FreeRTOS. The students can change [parameters](#parameters) in order to see impact on system (i.e. change priority of task of semaphore given by timer). Insight to system is provided by UART and diodies indicating execution of tasks.
 
+The part of project is creating tutorial explaining following aspects of `FreeRTOS`:
+ - Tasks
+ - Semaphores
+ - Queues
+ - Timers
+ - Project generation using CubeMX
+
+First part of the tutorial will be observation of FreeRTOS feature on the demo board. The second part will be coding given functionality (using provided base- project).
+
 ## Assumptions
 Project based on Nucleo board with [STM32F303RE](https://www.st.com/en/microcontrollers-microprocessors/stm32f303re.html) microcontroller. Controlled and powered by host device via USB connection. `FreeRTOS` support provided via project generator [CubeMX](https://www.st.com/en/development-tools/stm32cubemx.html).
 

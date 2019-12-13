@@ -21,6 +21,9 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "cmsis_os.h"
+#include "dma.h"
+#include "usart.h"
+#include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -42,50 +45,14 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-UART_HandleTypeDef huart2;
-DMA_HandleTypeDef hdma_usart2_rx;
-DMA_HandleTypeDef hdma_usart2_tx;
 
-typedef StaticTask_t osStaticThreadDef_t;
-typedef StaticTimer_t osStaticTimerDef_t;
-typedef StaticSemaphore_t osStaticSemaphoreDef_t;
-osThreadId_t defaultTaskHandle;
-osThreadId_t myTask02Handle;
-uint32_t myTask02Buffer[ 128 ];
-osStaticThreadDef_t myTask02ControlBlock;
-osThreadId_t myTask03Handle;
-uint32_t myTask03Buffer[ 128 ];
-osStaticThreadDef_t myTask03ControlBlock;
-osThreadId_t myTask04Handle;
-uint32_t myTask04Buffer[ 128 ];
-osStaticThreadDef_t myTask04ControlBlock;
-osThreadId_t uartRxHandle;
-uint32_t uartRxBuffer[ 128 ];
-osStaticThreadDef_t uartRxControlBlock;
-osTimerId_t myTimer01Handle;
-osStaticTimerDef_t myTimer01ControlBlock;
-osSemaphoreId_t myBinarySem01Handle;
-osStaticSemaphoreDef_t myBinarySem01ControlBlock;
-osSemaphoreId_t myBinarySem02Handle;
-osStaticSemaphoreDef_t myBinarySem02ControlBlock;
-osSemaphoreId_t myBinarySem03Handle;
-osStaticSemaphoreDef_t myBinarySem03ControlBlock;
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
-static void MX_GPIO_Init(void);
-static void MX_USART2_UART_Init(void);
-static void MX_DMA_Init(void);
-void StartDefaultTask(void *argument);
-void StartTask02(void *argument);
-void StartTask03(void *argument);
-void StartTask04(void *argument);
-void uartRxEntry(void *argument);
-void Callback01(void *argument);
-
+void MX_FREERTOS_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -130,114 +97,8 @@ int main(void)
 
   /* USER CODE END 2 */
 
-  osKernelInitialize();
-
-  /* USER CODE BEGIN RTOS_MUTEX */
-  /* add mutexes, ... */
-  /* USER CODE END RTOS_MUTEX */
-
-  /* Create the semaphores(s) */
-  /* definition and creation of myBinarySem01 */
-  const osSemaphoreAttr_t myBinarySem01_attributes = {
-    .name = "myBinarySem01",
-    .cb_mem = &myBinarySem01ControlBlock,
-    .cb_size = sizeof(myBinarySem01ControlBlock),
-  };
-  myBinarySem01Handle = osSemaphoreNew(1, 1, &myBinarySem01_attributes);
-
-  /* definition and creation of myBinarySem02 */
-  const osSemaphoreAttr_t myBinarySem02_attributes = {
-    .name = "myBinarySem02",
-    .cb_mem = &myBinarySem02ControlBlock,
-    .cb_size = sizeof(myBinarySem02ControlBlock),
-  };
-  myBinarySem02Handle = osSemaphoreNew(1, 1, &myBinarySem02_attributes);
-
-  /* definition and creation of myBinarySem03 */
-  const osSemaphoreAttr_t myBinarySem03_attributes = {
-    .name = "myBinarySem03",
-    .cb_mem = &myBinarySem03ControlBlock,
-    .cb_size = sizeof(myBinarySem03ControlBlock),
-  };
-  myBinarySem03Handle = osSemaphoreNew(1, 1, &myBinarySem03_attributes);
-
-  /* USER CODE BEGIN RTOS_SEMAPHORES */
-  /* add semaphores, ... */
-  /* USER CODE END RTOS_SEMAPHORES */
-
-  /* Create the timer(s) */
-  /* definition and creation of myTimer01 */
-  const osTimerAttr_t myTimer01_attributes = {
-    .name = "myTimer01",
-    .cb_mem = &myTimer01ControlBlock,
-    .cb_size = sizeof(myTimer01ControlBlock),
-  };
-  myTimer01Handle = osTimerNew(Callback01, osTimerPeriodic, NULL, &myTimer01_attributes);
-
-  /* USER CODE BEGIN RTOS_TIMERS */
-  /* start timers, add new ones, ... */
-  /* USER CODE END RTOS_TIMERS */
-
-  /* USER CODE BEGIN RTOS_QUEUES */
-  /* add queues, ... */
-  /* USER CODE END RTOS_QUEUES */
-
-  /* Create the thread(s) */
-  /* definition and creation of defaultTask */
-  const osThreadAttr_t defaultTask_attributes = {
-    .name = "defaultTask",
-    .priority = (osPriority_t) osPriorityNormal,
-    .stack_size = 128
-  };
-  defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
-
-  /* definition and creation of myTask02 */
-  const osThreadAttr_t myTask02_attributes = {
-    .name = "myTask02",
-    .stack_mem = &myTask02Buffer[0],
-    .stack_size = sizeof(myTask02Buffer),
-    .cb_mem = &myTask02ControlBlock,
-    .cb_size = sizeof(myTask02ControlBlock),
-    .priority = (osPriority_t) osPriorityLow,
-  };
-  myTask02Handle = osThreadNew(StartTask02, NULL, &myTask02_attributes);
-
-  /* definition and creation of myTask03 */
-  const osThreadAttr_t myTask03_attributes = {
-    .name = "myTask03",
-    .stack_mem = &myTask03Buffer[0],
-    .stack_size = sizeof(myTask03Buffer),
-    .cb_mem = &myTask03ControlBlock,
-    .cb_size = sizeof(myTask03ControlBlock),
-    .priority = (osPriority_t) osPriorityLow,
-  };
-  myTask03Handle = osThreadNew(StartTask03, NULL, &myTask03_attributes);
-
-  /* definition and creation of myTask04 */
-  const osThreadAttr_t myTask04_attributes = {
-    .name = "myTask04",
-    .stack_mem = &myTask04Buffer[0],
-    .stack_size = sizeof(myTask04Buffer),
-    .cb_mem = &myTask04ControlBlock,
-    .cb_size = sizeof(myTask04ControlBlock),
-    .priority = (osPriority_t) osPriorityLow,
-  };
-  myTask04Handle = osThreadNew(StartTask04, NULL, &myTask04_attributes);
-
-  /* definition and creation of uartRx */
-  const osThreadAttr_t uartRx_attributes = {
-    .name = "uartRx",
-    .stack_mem = &uartRxBuffer[0],
-    .stack_size = sizeof(uartRxBuffer),
-    .cb_mem = &uartRxControlBlock,
-    .cb_size = sizeof(uartRxControlBlock),
-    .priority = (osPriority_t) osPriorityLow,
-  };
-  uartRxHandle = osThreadNew(uartRxEntry, NULL, &uartRx_attributes);
-
-  /* USER CODE BEGIN RTOS_THREADS */
-  /* add threads, ... */
-  /* USER CODE END RTOS_THREADS */
+  /* Call init function for freertos objects (in freertos.c) */
+  MX_FREERTOS_Init(); 
 
   /* Start scheduler */
   osKernelStart();
@@ -299,204 +160,9 @@ void SystemClock_Config(void)
   }
 }
 
-/**
-  * @brief USART2 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_USART2_UART_Init(void)
-{
-
-  /* USER CODE BEGIN USART2_Init 0 */
-
-  /* USER CODE END USART2_Init 0 */
-
-  /* USER CODE BEGIN USART2_Init 1 */
-
-  /* USER CODE END USART2_Init 1 */
-  huart2.Instance = USART2;
-  huart2.Init.BaudRate = 115200;
-  huart2.Init.WordLength = UART_WORDLENGTH_8B;
-  huart2.Init.StopBits = UART_STOPBITS_1;
-  huart2.Init.Parity = UART_PARITY_NONE;
-  huart2.Init.Mode = UART_MODE_TX_RX;
-  huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  huart2.Init.OverSampling = UART_OVERSAMPLING_16;
-  huart2.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
-  huart2.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
-  if (HAL_UART_Init(&huart2) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN USART2_Init 2 */
-
-  /* USER CODE END USART2_Init 2 */
-
-}
-
-/** 
-  * Enable DMA controller clock
-  */
-static void MX_DMA_Init(void) 
-{
-
-  /* DMA controller clock enable */
-  __HAL_RCC_DMA1_CLK_ENABLE();
-
-  /* DMA interrupt init */
-  /* DMA1_Channel6_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA1_Channel6_IRQn, 5, 0);
-  HAL_NVIC_EnableIRQ(DMA1_Channel6_IRQn);
-  /* DMA1_Channel7_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA1_Channel7_IRQn, 5, 0);
-  HAL_NVIC_EnableIRQ(DMA1_Channel7_IRQn);
-
-}
-
-/**
-  * @brief GPIO Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_GPIO_Init(void)
-{
-  GPIO_InitTypeDef GPIO_InitStruct = {0};
-
-  /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOC_CLK_ENABLE();
-  __HAL_RCC_GPIOF_CLK_ENABLE();
-  __HAL_RCC_GPIOA_CLK_ENABLE();
-  __HAL_RCC_GPIOB_CLK_ENABLE();
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, LD2_Pin|LED1_Pin|LED3_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin : B1_Pin */
-  GPIO_InitStruct.Pin = B1_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : LD2_Pin LED1_Pin LED3_Pin */
-  GPIO_InitStruct.Pin = LD2_Pin|LED1_Pin|LED3_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : LED2_Pin */
-  GPIO_InitStruct.Pin = LED2_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(LED2_GPIO_Port, &GPIO_InitStruct);
-
-}
-
 /* USER CODE BEGIN 4 */
 
 /* USER CODE END 4 */
-
-/* USER CODE BEGIN Header_StartDefaultTask */
-/**
-  * @brief  Function implementing the defaultTask thread.
-  * @param  argument: Not used 
-  * @retval None
-  */
-/* USER CODE END Header_StartDefaultTask */
-void StartDefaultTask(void *argument)
-{
-  /* USER CODE BEGIN 5 */
-  /* Infinite loop */
-  for(;;)
-  {
-    osDelay(1);
-  }
-  /* USER CODE END 5 */ 
-}
-
-/* USER CODE BEGIN Header_StartTask02 */
-/**
-* @brief Function implementing the myTask02 thread.
-* @param argument: Not used
-* @retval None
-*/
-/* USER CODE END Header_StartTask02 */
-void StartTask02(void *argument)
-{
-  /* USER CODE BEGIN StartTask02 */
-  /* Infinite loop */
-  for(;;)
-  {
-    osDelay(1);
-  }
-  /* USER CODE END StartTask02 */
-}
-
-/* USER CODE BEGIN Header_StartTask03 */
-/**
-* @brief Function implementing the myTask03 thread.
-* @param argument: Not used
-* @retval None
-*/
-/* USER CODE END Header_StartTask03 */
-void StartTask03(void *argument)
-{
-  /* USER CODE BEGIN StartTask03 */
-  /* Infinite loop */
-  for(;;)
-  {
-    osDelay(1);
-  }
-  /* USER CODE END StartTask03 */
-}
-
-/* USER CODE BEGIN Header_StartTask04 */
-/**
-* @brief Function implementing the myTask04 thread.
-* @param argument: Not used
-* @retval None
-*/
-/* USER CODE END Header_StartTask04 */
-void StartTask04(void *argument)
-{
-  /* USER CODE BEGIN StartTask04 */
-  /* Infinite loop */
-  for(;;)
-  {
-    osDelay(1);
-  }
-  /* USER CODE END StartTask04 */
-}
-
-/* USER CODE BEGIN Header_uartRxEntry */
-/**
-* @brief Function implementing the uartRx thread.
-* @param argument: Not used
-* @retval None
-*/
-/* USER CODE END Header_uartRxEntry */
-void uartRxEntry(void *argument)
-{
-  /* USER CODE BEGIN uartRxEntry */
-  /* Infinite loop */
-  for(;;)
-  {
-    osDelay(1);
-  }
-  /* USER CODE END uartRxEntry */
-}
-
-/* Callback01 function */
-void Callback01(void *argument)
-{
-  /* USER CODE BEGIN Callback01 */
-  
-  /* USER CODE END Callback01 */
-}
 
 /**
   * @brief  Period elapsed callback in non blocking mode

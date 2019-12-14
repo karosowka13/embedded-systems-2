@@ -39,27 +39,34 @@ There will be few semaphores, triggering both single and few tasks. Timer will b
 
 ### Tasks
 
-There are 3 `Tasks` defined for purpuse of teaching: `Task1`, `Task2`, `Task3`. On start, each tasks turns on LED assigned to it. On exit, it turns off the diode.
-There are 2 `Tasks` defined for purpose of communication: `UartRX`, `UartTX`. They have the highest priority.
+There are 3 `Tasks` defined for purpose of experimenting: `myTask02`, `myTask03`, `myTask04`. On start, each tasks turns on LED assigned to it. On exit, it turns off the diode.
+There is `Task` defined for purpose of communication: `uartRX`. It have the highest priority.
 
 ### Semaphores
 
-7 Semaphores are defined. Each `Semaphore` triggers individuall group of [Tasks](#tasks).
+3 Semaphores are defined. Each `Semaphore` triggers each [Task](#tasks).
 
- | Semaphore | Task triggered |
+| Semaphore | Taks triggered |
+| - | - |
+| myBinarySem01 | myTask02 |
+| myBinarySem02 | myTask03 |
+| myBinarySem03 | myTask04 |
+
+`Sempahore code` is passed do `gs` [command](#api) to give specific group of semaphores. Please refer to table below.
+
+ | Semaphore Code | Semaphores given |
  | - | - |
- | 1 | Task1 | 
- | 1 | Task2 |
- | 3 | Task3 |
- | 4 | Task1, Task2 |
- | 5 | Task2, Task3 |
- | 6 | Task3, Task1 |
- | 7 | Task1, Task2, Task3 |
+ | 1 | 1 | 
+ | 1 | 2 |
+ | 3 | 3 |
+ | 4 | 1, 2 |
+ | 5 | 2, 3 |
+ | 6 | 3, 1 |
+ | 7 | 1, 2, 3 |
 
-Tasks `UartRX`, `UartTX` are triggered via semaphores `UartRX`, `UartTX` respectively. 
+Task `uartRX` is triggered via semaphore `uartRX`.
 
-`UartRX` sempahore is set in UART Rx interrupt.
-`UartTX` sempahore is set in tasks whether there are data ready to be sent.
+`uartRX` sempahore is set in UART Rx interrupt when there '\n' char detected.
 
 ### Queue
 One `Queue` is defined. It stores data sent by UART interface. Each [Task](#tasks) tries to acquire data from `Queue`. If succeded, task sends processed data to UART via `UartTX` task. 
@@ -72,7 +79,7 @@ One `Queue` is defined. It stores data sent by UART interface. Each [Task](#task
 
 ### Software timers
 
-Software timer gives choosen semaphore with set period to trigger specific tasks.
+Software timer gives chosen semaphore with set period to trigger specific tasks.
 
 ### Parameters
 
@@ -93,6 +100,7 @@ Board can be programmed by sending UART commands defined in table below. General
  -  `command` - string
 
 0 return value indicates status OK.
+-1 return value indicates that command was not found
 
 | Command | Parameter | Return value | Impact on system |
 | - | - | - | - |

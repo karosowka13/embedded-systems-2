@@ -78,6 +78,14 @@ osSemaphoreId_t myBinarySem02Handle;
 osStaticSemaphoreDef_t myBinarySem02ControlBlock;
 osSemaphoreId_t myBinarySem03Handle;
 osStaticSemaphoreDef_t myBinarySem03ControlBlock;
+osSemaphoreId_t myBinarySem04Handle;
+osStaticSemaphoreDef_t myBinarySem04ControlBlock;
+osSemaphoreId_t myBinarySem05Handle;
+osStaticSemaphoreDef_t myBinarySem05ControlBlock;
+osSemaphoreId_t myBinarySem06Handle;
+osStaticSemaphoreDef_t myBinarySem06ControlBlock;
+osSemaphoreId_t myBinarySem07Handle;
+osStaticSemaphoreDef_t myBinarySem07ControlBlock;
 osSemaphoreId_t uartRxSemHandle;
 osStaticSemaphoreDef_t uartRxSemControlBlock;
 
@@ -139,6 +147,38 @@ osKernelInitialize();
     .cb_size = sizeof(myBinarySem03ControlBlock),
   };
   myBinarySem03Handle = osSemaphoreNew(1, 1, &myBinarySem03_attributes);
+
+  /* definition and creation of myBinarySem04 */
+  const osSemaphoreAttr_t myBinarySem04_attributes = {
+    .name = "myBinarySem04",
+    .cb_mem = &myBinarySem04ControlBlock,
+    .cb_size = sizeof(myBinarySem04ControlBlock),
+  };
+  myBinarySem04Handle = osSemaphoreNew(1, 1, &myBinarySem04_attributes);
+
+  /* definition and creation of myBinarySem05 */
+  const osSemaphoreAttr_t myBinarySem05_attributes = {
+    .name = "myBinarySem05",
+    .cb_mem = &myBinarySem05ControlBlock,
+    .cb_size = sizeof(myBinarySem05ControlBlock),
+  };
+  myBinarySem05Handle = osSemaphoreNew(1, 1, &myBinarySem05_attributes);
+
+  /* definition and creation of myBinarySem06 */
+  const osSemaphoreAttr_t myBinarySem06_attributes = {
+    .name = "myBinarySem06",
+    .cb_mem = &myBinarySem06ControlBlock,
+    .cb_size = sizeof(myBinarySem06ControlBlock),
+  };
+  myBinarySem06Handle = osSemaphoreNew(1, 1, &myBinarySem06_attributes);
+
+  /* definition and creation of myBinarySem07 */
+  const osSemaphoreAttr_t myBinarySem07_attributes = {
+    .name = "myBinarySem07",
+    .cb_mem = &myBinarySem07ControlBlock,
+    .cb_size = sizeof(myBinarySem07ControlBlock),
+  };
+  myBinarySem07Handle = osSemaphoreNew(1, 1, &myBinarySem07_attributes);
 
   /* definition and creation of uartRxSem */
   const osSemaphoreAttr_t uartRxSem_attributes = {

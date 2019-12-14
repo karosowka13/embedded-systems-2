@@ -59,9 +59,21 @@ static int8_t change_duration_task_3(uint32_t arg){
     return change_duration_task(2, arg);
 }
 
-static int8_t timer_start(uint32_t);
-static int8_t timer_stop(uint32_t);
-static int8_t timer_change_period(uint32_t);
-static int8_t timer_change_semaphore_given(uint32_t);
-static int8_t queue_put_value(uint32_t);
-static int8_t semaphore_give(uint32_t);
+static int8_t timer_start(uint32_t arg){
+    return 0;
+}
+static int8_t timer_stop(uint32_t arg){
+    return 0;
+}
+static int8_t timer_change_period(uint32_t arg){
+    return 0;
+}
+static int8_t timer_change_semaphore_given(uint32_t arg){
+    return 0;
+}
+static int8_t queue_put_value(uint32_t arg){
+    return 0;
+}
+static int8_t semaphore_give(uint32_t arg){
+    return 0;
+}

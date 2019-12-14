@@ -275,6 +275,7 @@ osKernelInitialize();
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
+  osThreadTerminate(defaultTaskHandle);
   /* USER CODE END RTOS_THREADS */
 
 }
@@ -307,10 +308,18 @@ void StartDefaultTask(void *argument)
 void StartTask02(void *argument)
 {
   /* USER CODE BEGIN StartTask02 */
+  uint16_t to_process;
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+    osSemaphoreAcquire(myBinarySem01Handle, osWaitForever);
+    LED_turn_on(LED1);
+    if(osOK == osMessageQueueGet(myQueue01Handle, &to_process, NULL, 0)){
+      // TODO return value
+    };
+    osDelay(get_duration_task1());
+    LED_turn_off(LED1);
+
   }
   /* USER CODE END StartTask02 */
 }

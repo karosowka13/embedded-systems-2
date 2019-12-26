@@ -4,18 +4,24 @@ from serial import Serial, SerialTimeoutException
 class UART:
     TASKS = (1, 2, 3)
 
-    def __init__(self, port, speed=9600, timeout=1.0):
-        self.ser = Serial(port, baudrate=speed, timeout=timeout)
+    def __init__(self, port, speed=9600, timeout=1.0, debug=False):
+        if not debug:
+            self.ser = Serial(port, baudrate=speed, timeout=timeout)
+        self.debug = debug
 
     def __del__(self):
-        if self.ser.is_open:
-            self.ser.close()
-        del self.ser
+        if not self.debug:
+            if self.ser.is_open:
+                self.ser.close()
+            del self.ser
 
     def write(self, msg):
-        self.ser.write(msg.encode())
+        if not self.debug:
+            self.ser.write(msg.encode())
 
     def read(self, msg):
+        if self.debug:
+            return "0"
         self.write(msg)
         try:
             return self.ser.read(1).decode()

@@ -56,8 +56,10 @@ class UART:
 
     def queue_put(self, args):
         value = args.get("value")
+        rc = 0
         if value is not None:
-            rc = int(self.read(f"pq {value}"))
+            rc += int(self.read(f"pq {value}"))
+        return rc
 
     def get_semaphore(self, idx):
         pass

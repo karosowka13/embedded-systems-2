@@ -37,3 +37,17 @@ def timer():
         return "OK"
     else:
         return f"Problem with UARt command. Return code: {rc}", 500
+
+
+@app.route("/queue", methods=["POST"])
+def queue():
+    args = request.get_json()
+    try:
+        validate(args, schemas.queue_schema)
+    except ValidationError as e:
+        return f"Invalid JSON sent: {e}", 400
+    rc = uart.queue_put(args)
+    if rc == 0:
+        return "OK"
+    else:
+        return f"Problem with UARt command. Return code: {rc}", 500

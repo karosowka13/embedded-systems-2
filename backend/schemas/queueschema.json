@@ -1,0 +1,10 @@
+{
+  "title": "Queue",
+  "type": "object",
+  "properties": {
+    "value": {
+      "type": "integer",
+      "description": "Value to put into queue"
+    }
+  }
+}

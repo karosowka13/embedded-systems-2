@@ -2,6 +2,7 @@ import serial
 
 
 class UART:
+    TASKS = (1, 2, 3)
 
     def manage_task(self, idx, args):
         return 0

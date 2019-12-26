@@ -1,0 +1,18 @@
+{
+  "title": "Timer",
+  "type": "object",
+  "properties": {
+    "running": {
+      "type": "boolean",
+      "description": "Control of timer. True for starting timer, false for stopping"
+    },
+    "period": {
+      "type": "integer",
+      "description": "Period of timer"
+    },
+    "semaphore": {
+      "type": "integer",
+      "description": "ID of semaphore to change for timer"
+    }
+  }
+}

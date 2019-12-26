@@ -25,6 +25,15 @@ def task1(task_id):
         return f"Problem with UARt command. Return code: {rc}", 500
 
 
-@app.route("/timer")
+@app.route("/timer", methods=["POST"])
 def timer():
-    return "Timer"
+    args = request.get_json()
+    try:
+        validate(args, schemas.timer_schema)
+    except ValidationError as e:
+        return f"Invalid JSON sent: {e}", 400
+    rc = uart.manage_timer(args)
+    if rc == 0:
+        return "OK"
+    else:
+        return f"Problem with UARt command. Return code: {rc}", 500

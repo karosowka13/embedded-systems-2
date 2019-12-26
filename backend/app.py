@@ -7,7 +7,12 @@ from . import schemas
 
 app = Flask(__name__)
 app.config.from_object("backend.config")
-uart = UART(app.config["SERIAL_PORT"], speed=app.config["SERIAL_SPEED"], timeout=app.config["SERIAL_TIMEOUT"])
+uart = UART(
+    app.config["SERIAL_PORT"],
+    speed=app.config["SERIAL_SPEED"],
+    timeout=app.config["SERIAL_TIMEOUT"],
+    debug=app.config["APP_DEBUG"],
+)
 
 
 @app.route("/task/<int:task_id>", methods=["POST"])

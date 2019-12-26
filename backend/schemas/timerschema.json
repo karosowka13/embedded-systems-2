@@ -12,6 +12,8 @@
     },
     "semaphore": {
       "type": "integer",
+      "minimum": 1,
+      "maximum": 7,
       "description": "ID of semaphore to change for timer"
     }
   }

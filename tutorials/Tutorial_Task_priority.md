@@ -23,3 +23,8 @@ In one moment only one task is executed. So what are the others statuses?
 
 #### Flow chart of the states and transitions between them
 ![alt text](F:\EAiIB\semestr2\embedded-systems-2\img\states_flow_chart.png "Flow chart of states")
+
+
+## Programme 
+
+Now you can consider how tasks are changed and how often operating system verify wheter the change of the context is needed. Everything is happening because of System Tick. Frequency of the System Tick is much more lower in comparision with frequency of processor clock. The time is configured manually via macro configTICK_RATE_HZ in configuation file. 

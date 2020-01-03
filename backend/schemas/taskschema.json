@@ -1,0 +1,14 @@
+{
+  "title": "Task",
+  "type": "object",
+  "properties": {
+    "duration": {
+      "type": "integer",
+      "description": "Duration of task"
+    },
+    "priority": {
+      "type": "integer",
+      "description": "Priority of task"
+    }
+  }
+}

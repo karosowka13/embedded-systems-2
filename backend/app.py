@@ -18,7 +18,7 @@ uart = UART(
 @app.route("/task/<int:task_id>", methods=["POST"])
 def task1(task_id):
     if task_id not in uart.TASKS:
-        return f"Bas Task ID. Received: {task_id}. Allowed: {uart.TASKS}", 400
+        return f"Bad Task ID. Received: {task_id}. Allowed: {uart.TASKS}", 400
     args = request.get_json()
     try:
         validate(args, schemas.task_schema)

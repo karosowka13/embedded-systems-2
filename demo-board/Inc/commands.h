@@ -21,9 +21,10 @@ command_t;
 extern UART_HandleTypeDef huart2;
 
 
-static char command[10];
+static uint8_t command[10];
 static uint32_t arg;
-static int8_t buffer[BUFFER_LEN];
+static uint8_t buffer[BUFFER_LEN];
+static uint8_t buffer_tmp[BUFFER_LEN];
 
 void receive_start(void);
 void receive_stop(void);
@@ -42,6 +43,7 @@ static int8_t timer_change_period(uint32_t);
 static int8_t timer_change_semaphore_given(uint32_t);
 static int8_t queue_put_value(uint32_t);
 static int8_t semaphore_give(uint32_t);
+
 
 
 #endif

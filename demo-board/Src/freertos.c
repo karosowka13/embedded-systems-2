@@ -152,9 +152,10 @@ osKernelInitialize();
 
   /* USER CODE BEGIN RTOS_SEMAPHORES */
   /* add semaphores, ... */
-  // osSemaphoreAcquire(myBinarySem01Handle, osWaitForever);
-  // osSemaphoreAcquire(myBinarySem02Handle, osWaitForever);
-  // osSemaphoreAcquire(myBinarySem03Handle, osWaitForever);
+  osSemaphoreAcquire(myBinarySem01Handle, osWaitForever);
+  osSemaphoreAcquire(myBinarySem02Handle, osWaitForever);
+  osSemaphoreAcquire(myBinarySem03Handle, osWaitForever);
+  osSemaphoreAcquire(uartRxSemHandle, osWaitForever);
   /* USER CODE END RTOS_SEMAPHORES */
 
   /* Create the timer(s) */
@@ -342,9 +343,9 @@ void uartRxEntry(void *argument)
   /* Infinite loop */
   for(;;)
   {
-	  osDelay(1);
-//    osSemaphoreAcquire(uartRxSemHandle, osWaitForever);
-//    parse_commands();
+	  // osDelay(1);
+   osSemaphoreAcquire(uartRxSemHandle, osWaitForever);
+   parse_commands();
   }
   /* USER CODE END uartRxEntry */
 }

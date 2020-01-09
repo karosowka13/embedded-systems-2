@@ -1,6 +1,7 @@
 #include "commands.h"
 
 
+
 static command_t* commands = {
     'cpt1',     change_priority_task_1,
     'cpt2',     change_priority_task_2,
@@ -9,6 +10,7 @@ static command_t* commands = {
     'cdt2',     change_duration_task_2,
     'cdt3',     change_duration_task_3,
 };
+
 
 void receive_start(void){
     HAL_UART_Receive_IT(&huart2, buffer, BUFFER_LEN);
@@ -19,7 +21,8 @@ void receive_stop(void){
 }
 
 void parse_commands(void){
-    int res = sscanf (huart2.pRxBuffPtr,"%s %d",command, &arg);
+    strncpy(buffer_tmp,buffer,12);
+    int res = sscanf (buffer_tmp,"%s %d",command, &arg);
     if (res = 2) {
         int8_t res = execute_command();
         receive_start();
@@ -27,7 +30,8 @@ void parse_commands(void){
 }
 
 int8_t execute_command(void){
-    for(uint16_t i; i<COMMANDS_LEN; i++){
+	uint16_t stop = 6;
+    for(uint16_t i = 0; i<stop; i++){
         if(strcmp(command, commands[i].name) == 0){
             return commands[i].func(arg);
         }

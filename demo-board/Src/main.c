@@ -24,6 +24,7 @@
 #include "dma.h"
 #include "usart.h"
 #include "gpio.h"
+#include "commands.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */

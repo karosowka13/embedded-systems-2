@@ -88,7 +88,7 @@ osStaticSemaphoreDef_t uartRxSemControlBlock;
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
 	if(strstr(huart->pRxBuffPtr, '\n')) {
 		receive_stop();
-		// osSemaphoreRelease(uartRxSemHandle);
+		osSemaphoreRelease(uartRxSemHandle);
 	}
 }
 /* USER CODE END FunctionPrototypes */
@@ -280,14 +280,14 @@ void StartTask02(void *argument)
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
-    // osSemaphoreAcquire(myBinarySem01Handle, osWaitForever);
-    // LED_turn_on(LED_TEST);
-    // if(osOK == osMessageQueueGet(myQueue01Handle, &to_process, NULL, 0)){
-    //   // TODO return value
-    // };
-    // osStatus_t ret = osDelay(get_duration_task1());
-    // LED_turn_off(LED1);
+    // osDelay(1);
+    osSemaphoreAcquire(myBinarySem01Handle, osWaitForever);
+    LED_turn_on(LED_TEST);
+    if(osOK == osMessageQueueGet(myQueue01Handle, &to_process, NULL, 0)){
+      // TODO return value
+    };
+    osStatus_t ret = osDelay(get_duration_task1());
+    LED_turn_off(LED1);
 
   }
   /* USER CODE END StartTask02 */

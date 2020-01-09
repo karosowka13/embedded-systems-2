@@ -342,8 +342,9 @@ void uartRxEntry(void *argument)
   /* Infinite loop */
   for(;;)
   {
-    osSemaphoreAcquire(uartRxSemHandle, osWaitForever);
-    parse_commands();
+	  osDelay(1);
+//    osSemaphoreAcquire(uartRxSemHandle, osWaitForever);
+//    parse_commands();
   }
   /* USER CODE END uartRxEntry */
 }

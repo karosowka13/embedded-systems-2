@@ -11,11 +11,11 @@ static command_t* commands = {
 };
 
 void receive_start(void){
-    HAL_UART_Transmit_IT(&huart2, buffer, BUFFER_LEN);
+    HAL_UART_Receive_IT(&huart2, buffer, BUFFER_LEN);
 }
 
 void receive_stop(void){
-    HAL_UART_AbortTransmit_IT(&huart2);
+    HAL_UART_AbortReceive_IT(&huart2);
 }
 
 void parse_commands(void){

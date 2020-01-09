@@ -55,6 +55,8 @@ typedef StaticQueue_t osStaticMessageQDef_t;
 typedef StaticTimer_t osStaticTimerDef_t;
 typedef StaticSemaphore_t osStaticSemaphoreDef_t;
 osThreadId_t defaultTaskHandle;
+uint32_t defaultTaskBuffer[ 128 ];
+osStaticThreadDef_t defaultTaskControlBlock;
 osThreadId_t myTask02Handle;
 uint32_t myTask02Buffer[ 128 ];
 osStaticThreadDef_t myTask02ControlBlock;
@@ -78,14 +80,6 @@ osSemaphoreId_t myBinarySem02Handle;
 osStaticSemaphoreDef_t myBinarySem02ControlBlock;
 osSemaphoreId_t myBinarySem03Handle;
 osStaticSemaphoreDef_t myBinarySem03ControlBlock;
-osSemaphoreId_t myBinarySem04Handle;
-osStaticSemaphoreDef_t myBinarySem04ControlBlock;
-osSemaphoreId_t myBinarySem05Handle;
-osStaticSemaphoreDef_t myBinarySem05ControlBlock;
-osSemaphoreId_t myBinarySem06Handle;
-osStaticSemaphoreDef_t myBinarySem06ControlBlock;
-osSemaphoreId_t myBinarySem07Handle;
-osStaticSemaphoreDef_t myBinarySem07ControlBlock;
 osSemaphoreId_t uartRxSemHandle;
 osStaticSemaphoreDef_t uartRxSemControlBlock;
 
@@ -93,9 +87,9 @@ osStaticSemaphoreDef_t uartRxSemControlBlock;
 /* USER CODE BEGIN FunctionPrototypes */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
 	if(strstr(huart->pRxBuffPtr, '\n')) {
-    receive_stop();
-    osSemaphoreRelease(uartRxSemHandle);
-  }
+		receive_stop();
+		// osSemaphoreRelease(uartRxSemHandle);
+	}
 }
 /* USER CODE END FunctionPrototypes */
 
@@ -148,38 +142,6 @@ osKernelInitialize();
   };
   myBinarySem03Handle = osSemaphoreNew(1, 1, &myBinarySem03_attributes);
 
-  /* definition and creation of myBinarySem04 */
-  const osSemaphoreAttr_t myBinarySem04_attributes = {
-    .name = "myBinarySem04",
-    .cb_mem = &myBinarySem04ControlBlock,
-    .cb_size = sizeof(myBinarySem04ControlBlock),
-  };
-  myBinarySem04Handle = osSemaphoreNew(1, 1, &myBinarySem04_attributes);
-
-  /* definition and creation of myBinarySem05 */
-  const osSemaphoreAttr_t myBinarySem05_attributes = {
-    .name = "myBinarySem05",
-    .cb_mem = &myBinarySem05ControlBlock,
-    .cb_size = sizeof(myBinarySem05ControlBlock),
-  };
-  myBinarySem05Handle = osSemaphoreNew(1, 1, &myBinarySem05_attributes);
-
-  /* definition and creation of myBinarySem06 */
-  const osSemaphoreAttr_t myBinarySem06_attributes = {
-    .name = "myBinarySem06",
-    .cb_mem = &myBinarySem06ControlBlock,
-    .cb_size = sizeof(myBinarySem06ControlBlock),
-  };
-  myBinarySem06Handle = osSemaphoreNew(1, 1, &myBinarySem06_attributes);
-
-  /* definition and creation of myBinarySem07 */
-  const osSemaphoreAttr_t myBinarySem07_attributes = {
-    .name = "myBinarySem07",
-    .cb_mem = &myBinarySem07ControlBlock,
-    .cb_size = sizeof(myBinarySem07ControlBlock),
-  };
-  myBinarySem07Handle = osSemaphoreNew(1, 1, &myBinarySem07_attributes);
-
   /* definition and creation of uartRxSem */
   const osSemaphoreAttr_t uartRxSem_attributes = {
     .name = "uartRxSem",
@@ -190,6 +152,9 @@ osKernelInitialize();
 
   /* USER CODE BEGIN RTOS_SEMAPHORES */
   /* add semaphores, ... */
+  // osSemaphoreAcquire(myBinarySem01Handle, osWaitForever);
+  // osSemaphoreAcquire(myBinarySem02Handle, osWaitForever);
+  // osSemaphoreAcquire(myBinarySem03Handle, osWaitForever);
   /* USER CODE END RTOS_SEMAPHORES */
 
   /* Create the timer(s) */
@@ -224,8 +189,11 @@ osKernelInitialize();
   /* definition and creation of defaultTask */
   const osThreadAttr_t defaultTask_attributes = {
     .name = "defaultTask",
-    .priority = (osPriority_t) osPriorityNormal,
-    .stack_size = 128
+    .stack_mem = &defaultTaskBuffer[0],
+    .stack_size = sizeof(defaultTaskBuffer),
+    .cb_mem = &defaultTaskControlBlock,
+    .cb_size = sizeof(defaultTaskControlBlock),
+    .priority = (osPriority_t) osPriorityLow,
   };
   defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
 
@@ -236,7 +204,7 @@ osKernelInitialize();
     .stack_size = sizeof(myTask02Buffer),
     .cb_mem = &myTask02ControlBlock,
     .cb_size = sizeof(myTask02ControlBlock),
-    .priority = (osPriority_t) osPriorityLow,
+    .priority = (osPriority_t) osPriorityBelowNormal,
   };
   myTask02Handle = osThreadNew(StartTask02, NULL, &myTask02_attributes);
 
@@ -247,7 +215,7 @@ osKernelInitialize();
     .stack_size = sizeof(myTask03Buffer),
     .cb_mem = &myTask03ControlBlock,
     .cb_size = sizeof(myTask03ControlBlock),
-    .priority = (osPriority_t) osPriorityLow,
+    .priority = (osPriority_t) osPriorityBelowNormal,
   };
   myTask03Handle = osThreadNew(StartTask03, NULL, &myTask03_attributes);
 
@@ -258,7 +226,7 @@ osKernelInitialize();
     .stack_size = sizeof(myTask04Buffer),
     .cb_mem = &myTask04ControlBlock,
     .cb_size = sizeof(myTask04ControlBlock),
-    .priority = (osPriority_t) osPriorityLow,
+    .priority = (osPriority_t) osPriorityBelowNormal,
   };
   myTask04Handle = osThreadNew(StartTask04, NULL, &myTask04_attributes);
 
@@ -269,7 +237,7 @@ osKernelInitialize();
     .stack_size = sizeof(uartRxBuffer),
     .cb_mem = &uartRxControlBlock,
     .cb_size = sizeof(uartRxControlBlock),
-    .priority = (osPriority_t) osPriorityLow,
+    .priority = (osPriority_t) osPriorityHigh7,
   };
   uartRxHandle = osThreadNew(uartRxEntry, NULL, &uartRx_attributes);
 
@@ -312,13 +280,14 @@ void StartTask02(void *argument)
   /* Infinite loop */
   for(;;)
   {
-    osSemaphoreAcquire(myBinarySem01Handle, osWaitForever);
-    LED_turn_on(LED1);
-    if(osOK == osMessageQueueGet(myQueue01Handle, &to_process, NULL, 0)){
-      // TODO return value
-    };
-    osDelay(get_duration_task1());
-    LED_turn_off(LED1);
+    osDelay(1);
+    // osSemaphoreAcquire(myBinarySem01Handle, osWaitForever);
+    // LED_turn_on(LED_TEST);
+    // if(osOK == osMessageQueueGet(myQueue01Handle, &to_process, NULL, 0)){
+    //   // TODO return value
+    // };
+    // osStatus_t ret = osDelay(get_duration_task1());
+    // LED_turn_off(LED1);
 
   }
   /* USER CODE END StartTask02 */
@@ -374,8 +343,7 @@ void uartRxEntry(void *argument)
   for(;;)
   {
     osSemaphoreAcquire(uartRxSemHandle, osWaitForever);
-
-    
+    parse_commands();
   }
   /* USER CODE END uartRxEntry */
 }

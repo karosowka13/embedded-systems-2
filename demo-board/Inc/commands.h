@@ -9,7 +9,7 @@
 #include "FreeRTOS.h"
 #include "cmsis_os.h"
 
-#define BUFFER_LEN 30
+#define BUFFER_LEN 12
 #define COMMANDS_LEN sizeof(commands) / sizeof(command_t)
 
 typedef struct {

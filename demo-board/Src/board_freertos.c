@@ -36,7 +36,7 @@ int8_t change_duration_task(uint8_t task, uint32_t duration) {
 }
 
 uint32_t get_duration_task1(){
-    return tasks_duration[0];
+	return tasks_duration[0];
 }
 uint32_t get_duration_task2(){
     return tasks_duration[1];

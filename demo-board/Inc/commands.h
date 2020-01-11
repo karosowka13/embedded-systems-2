@@ -22,7 +22,6 @@ command_t;
 
 extern UART_HandleTypeDef huart2;
 
-
 static uint8_t command[10];
 static uint32_t arg;
 static uint8_t buffer[BUFFER_LEN];

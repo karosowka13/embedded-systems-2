@@ -371,7 +371,7 @@ void uartRxEntry(void *argument)
 void Callback01(void *argument)
 {
   /* USER CODE BEGIN Callback01 */
-  
+  release_semaphore(get_semaphore_code_released());
   /* USER CODE END Callback01 */
 }
 

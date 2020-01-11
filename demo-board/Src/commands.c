@@ -45,17 +45,14 @@ int8_t execute_command(void){
 }
 
 static int8_t change_priority_task_1(uint32_t arg){
-    return 0;
-    // return change_priority_task(0, arg);
+    return change_priority_task(0, arg);
 }
 
 static int8_t change_priority_task_2(uint32_t arg){
-    return 0;
     return change_priority_task(1, arg);
 }
 
 static int8_t change_priority_task_3(uint32_t arg){
-    return 0;
     return change_priority_task(2, arg);
 }
 
@@ -72,24 +69,23 @@ static int8_t change_duration_task_3(uint32_t arg){
 }
 
 static int8_t timer_start(uint32_t arg){
+    osTimerStart(myTimer01Handle, get_timer_period());
     return 0;
 }
 static int8_t timer_stop(uint32_t arg){
+    osTimerStop(myTimer01Handle);
     return 0;
 }
 static int8_t timer_change_period(uint32_t arg){
-    return 0;
+    return change_timer_period(arg);
 }
 static int8_t timer_change_semaphore_given(uint32_t arg){
-    return 0;
+    return change_semaphore_code_released(arg);
 }
 static int8_t queue_put_value(uint32_t arg){
+    osMessageQueuePut(myQueue01Handle, &arg, NULL, 0);
     return 0;
 }
 static int8_t semaphore_give(uint32_t arg){
-    if (arg > MAX_SEM) {
-        return 4;
-    }
-    release_semaphore(arg);
-    return 0;
+    return release_semaphore(arg);
 }

@@ -13,6 +13,9 @@ uint32_t tasks_duration[TASKS] = {
     100,
 };
 
+uint32_t timer_period = 1000;
+int8_t semaphore_code = 1;
+
 int8_t change_priority_task(uint8_t task, uint32_t priority) {
     if (task >= TASKS) {
         return 0;
@@ -45,7 +48,9 @@ uint32_t get_duration_task3(){
     return tasks_duration[2];
 }
 
-uint32_t release_semaphore(uint32_t semaphore_code){
+
+
+int8_t release_semaphore(uint32_t semaphore_code){
     switch (semaphore_code)
     {
     case 1:
@@ -75,6 +80,33 @@ uint32_t release_semaphore(uint32_t semaphore_code){
         osSemaphoreRelease(myBinarySem03Handle);
         break;
     default:
+        return 4;
         break;
     }
+    return 0;
+}
+
+int8_t change_timer_period(uint32_t period) {
+    if (period < MIN_TIMER_PERIOD | period > MAX_TIMER_PERIOD) {
+        return 2;
+    } else {
+        timer_period = period;
+        osTimerStart(myTimer01Handle, period);
+        return 0;
+    }
+}
+
+uint32_t get_timer_period() {
+    return timer_period;
+}
+
+int8_t change_semaphore_code_released(uint32_t code) {
+    if (code > MAX_SEMAPHORE_CODE){
+        return 4;
+    } else {
+        semaphore_code = code;
+    }
+}
+uint32_t get_semaphore_code_released(){
+    return semaphore_code;
 }

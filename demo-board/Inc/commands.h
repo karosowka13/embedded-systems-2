@@ -26,6 +26,7 @@ static uint8_t command[10];
 static uint32_t arg;
 static uint8_t buffer[BUFFER_LEN];
 static uint8_t buffer_tmp[BUFFER_LEN];
+static uint8_t buffer_tx[BUFFER_LEN];
 
 void receive_start(void);
 void receive_stop(void);

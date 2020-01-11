@@ -285,7 +285,7 @@ void StartTask02(void *argument)
     osSemaphoreAcquire(myBinarySem01Handle, osWaitForever);
     LED_turn_on(LED_TEST);
     if(osOK == osMessageQueueGet(myQueue01Handle, &to_process, NULL, 0)){
-      // TODO return value
+      send(to_process * 2);
     };
     osStatus_t ret = osDelay(get_duration_task1());
     LED_turn_off(LED_TEST);
@@ -312,7 +312,7 @@ void StartTask03(void *argument)
 	osSemaphoreAcquire(myBinarySem02Handle, osWaitForever);
 	LED_turn_on(LED2);
 	if(osOK == osMessageQueueGet(myQueue01Handle, &to_process, NULL, 0)){
-	  // TODO return value
+      send(to_process * 3);
 	};
 	osStatus_t ret = osDelay(get_duration_task1());
 	LED_turn_off(LED2);
@@ -339,7 +339,7 @@ void StartTask04(void *argument)
 	osSemaphoreAcquire(myBinarySem03Handle, osWaitForever);
 	LED_turn_on(LED3);
 	if(osOK == osMessageQueueGet(myQueue01Handle, &to_process, NULL, 0)){
-	  // TODO return value
+      send(to_process * 4);
 	};
 	osStatus_t ret = osDelay(get_duration_task1());
 	LED_turn_off(LED3);

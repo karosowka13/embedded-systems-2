@@ -26,11 +26,19 @@ void receive_stop(void){
     HAL_UART_AbortReceive_IT(&huart2);
 }
 
+void send(uint32_t number){
+    uint16_t size = sprintf(buffer_tx, "%d\n", number);
+    HAL_UART_Transmit_IT(&huart2, buffer_tx, size);
+}
+
 void parse_commands(void){
     strncpy(buffer_tmp,buffer,12);
     int res = sscanf (buffer_tmp,"%s %d",command, &arg);
     if (res = 2) {
         int8_t res = execute_command();
+        if(res != -2){
+            send(res);
+        }
         receive_start();
     }
 }

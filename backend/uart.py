@@ -24,7 +24,7 @@ class UART:
             return "0"
         self.write(msg)
         try:
-            return self.ser.read(1).decode()
+            return self.ser.readline().decode()
         except SerialTimeoutException:
             return "-2"
 

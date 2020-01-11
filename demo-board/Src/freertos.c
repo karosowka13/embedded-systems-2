@@ -38,7 +38,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#define configASSERT
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -196,7 +196,7 @@ osKernelInitialize();
     .cb_size = sizeof(defaultTaskControlBlock),
     .priority = (osPriority_t) osPriorityLow,
   };
-  defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
+  // defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
 
   /* definition and creation of myTask02 */
   const osThreadAttr_t myTask02_attributes = {
@@ -288,7 +288,7 @@ void StartTask02(void *argument)
       // TODO return value
     };
     osStatus_t ret = osDelay(get_duration_task1());
-    LED_turn_off(LED1);
+    LED_turn_off(LED_TEST);
 
   }
   /* USER CODE END StartTask02 */
@@ -304,10 +304,19 @@ void StartTask02(void *argument)
 void StartTask03(void *argument)
 {
   /* USER CODE BEGIN StartTask03 */
+	uint16_t to_process;
+
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+	osSemaphoreAcquire(myBinarySem02Handle, osWaitForever);
+	LED_turn_on(LED2);
+	if(osOK == osMessageQueueGet(myQueue01Handle, &to_process, NULL, 0)){
+	  // TODO return value
+	};
+	osStatus_t ret = osDelay(get_duration_task1());
+	LED_turn_off(LED2);
+
   }
   /* USER CODE END StartTask03 */
 }
@@ -322,10 +331,18 @@ void StartTask03(void *argument)
 void StartTask04(void *argument)
 {
   /* USER CODE BEGIN StartTask04 */
+	  uint16_t to_process;
+
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+	osSemaphoreAcquire(myBinarySem03Handle, osWaitForever);
+	LED_turn_on(LED3);
+	if(osOK == osMessageQueueGet(myQueue01Handle, &to_process, NULL, 0)){
+	  // TODO return value
+	};
+	osStatus_t ret = osDelay(get_duration_task1());
+	LED_turn_off(LED3);
   }
   /* USER CODE END StartTask04 */
 }
@@ -343,7 +360,7 @@ void uartRxEntry(void *argument)
   /* Infinite loop */
   for(;;)
   {
-	  // osDelay(1);
+	  // osDelay(1000);
    osSemaphoreAcquire(uartRxSemHandle, osWaitForever);
    parse_commands();
   }

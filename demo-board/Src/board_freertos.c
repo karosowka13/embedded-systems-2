@@ -44,3 +44,37 @@ uint32_t get_duration_task2(){
 uint32_t get_duration_task3(){
     return tasks_duration[2];
 }
+
+uint32_t release_semaphore(uint32_t semaphore_code){
+    switch (semaphore_code)
+    {
+    case 1:
+        osSemaphoreRelease(myBinarySem01Handle);
+        break;
+    case 2:
+        osSemaphoreRelease(myBinarySem02Handle);
+        break;
+    case 3:
+        osSemaphoreRelease(myBinarySem03Handle);
+        break;
+    case 4:
+        osSemaphoreRelease(myBinarySem01Handle);
+        osSemaphoreRelease(myBinarySem02Handle);
+        break;
+    case 5:
+        osSemaphoreRelease(myBinarySem02Handle);
+        osSemaphoreRelease(myBinarySem03Handle);
+        break;
+    case 6:
+        osSemaphoreRelease(myBinarySem03Handle);
+        osSemaphoreRelease(myBinarySem01Handle);
+        break;
+    case 7:
+        osSemaphoreRelease(myBinarySem01Handle);
+        osSemaphoreRelease(myBinarySem02Handle);
+        osSemaphoreRelease(myBinarySem03Handle);
+        break;
+    default:
+        break;
+    }
+}

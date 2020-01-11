@@ -9,11 +9,13 @@
 #include "FreeRTOS.h"
 #include "cmsis_os.h"
 
+#define MAX_SEM 7
+
 #define BUFFER_LEN 12
 #define COMMANDS_LEN sizeof(commands) / sizeof(command_t)
 
 typedef struct {
-    char* name;
+    char name[8];
     int8_t (*func)(uint32_t arg);
 }
 command_t;

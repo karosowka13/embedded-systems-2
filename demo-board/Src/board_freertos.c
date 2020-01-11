@@ -8,9 +8,9 @@ osThreadId_t* threads_p[TASKS] = {
 };
 
 uint32_t tasks_duration[TASKS] = {
-    1000,
-    1000,
-    1000,
+    100,
+    100,
+    100,
 };
 
 int8_t change_priority_task(uint8_t task, uint32_t priority) {

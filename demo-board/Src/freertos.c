@@ -67,7 +67,7 @@ osThreadId_t myTask04Handle;
 uint32_t myTask04Buffer[ 128 ];
 osStaticThreadDef_t myTask04ControlBlock;
 osThreadId_t uartRxHandle;
-uint32_t uartRxBuffer[ 128 ];
+uint32_t uartRxBuffer[ 512 ];
 osStaticThreadDef_t uartRxControlBlock;
 osMessageQueueId_t myQueue01Handle;
 uint8_t myQueue01Buffer[ 16 * sizeof( uint16_t ) ];
@@ -196,7 +196,7 @@ osKernelInitialize();
     .cb_size = sizeof(defaultTaskControlBlock),
     .priority = (osPriority_t) osPriorityLow,
   };
-  // defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
+  defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
 
   /* definition and creation of myTask02 */
   const osThreadAttr_t myTask02_attributes = {
@@ -238,7 +238,7 @@ osKernelInitialize();
     .stack_size = sizeof(uartRxBuffer),
     .cb_mem = &uartRxControlBlock,
     .cb_size = sizeof(uartRxControlBlock),
-    .priority = (osPriority_t) osPriorityHigh7,
+    .priority = (osPriority_t) osPriorityHigh,
   };
   uartRxHandle = osThreadNew(uartRxEntry, NULL, &uartRx_attributes);
 

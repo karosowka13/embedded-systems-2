@@ -1,8 +1,8 @@
 #include "commands.h"
 
 
-
-static command_t commands [6]= {
+#define COMMANDS 12
+static command_t commands [COMMANDS]= {
     {"cpt1",        change_priority_task_1},
     {"cpt2",        change_priority_task_2},
     {"cpt3",        change_priority_task_3},
@@ -36,13 +36,12 @@ void parse_commands(void){
 }
 
 int8_t execute_command(void){
-	uint16_t stop = 6;
-    for(uint16_t i = 0; i<stop; i++){
+    for(uint16_t i = 0; i<COMMANDS; i++){
         if(strcmp(command, commands[i].name) == 0){
             return commands[i].func(arg);
         }
-        return -1;
     }
+    return -1;
 }
 
 static int8_t change_priority_task_1(uint32_t arg){

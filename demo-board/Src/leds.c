@@ -12,5 +12,5 @@ void LED_turn_on(GPIO_TypeDef* port, uint16_t pin){
 }
 
 void LED_turn_off(GPIO_TypeDef* port, uint16_t pin){
-	HAL_GPIO_WritePin(port, pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(port, pin, GPIO_PIN_RESET);
 }

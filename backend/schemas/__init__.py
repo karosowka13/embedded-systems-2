@@ -12,3 +12,6 @@ with (_base_dir / "timerschema.json").open("r") as fp:
 
 with (_base_dir / "queueschema.json").open("r") as fp:
     queue_schema = json.load(fp)
+
+with (_base_dir / "semaphoreschema.json").open("r") as fp:
+    semaphore_schema = json.load(fp)

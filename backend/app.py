@@ -8,7 +8,7 @@ from . import config
 
 routes = web.RouteTableDef()
 
-app = web.Application()
+app = web.Application(debug=config.APP_DEBUG)
 app["port"] = config.APP_PORT
 app["host"] = config.APP_HOST
 

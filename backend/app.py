@@ -57,3 +57,17 @@ def queue():
         return "OK"
     else:
         return f"Problem with UARt command. Return code: {rc}", 500
+
+
+@app.route("/semaphore", methods=["POST"])
+def semaphore():
+    args = request.get_json()
+    try:
+        validate(args, schemas.semaphore_schema)
+    except ValidationError as e:
+        return f"Invalid JSON sent: {e}", 400
+    rc = uart.get_semaphore(args)
+    if rc == 0:
+        return "OK"
+    else:
+        return f"Problem with UARt command. Return code: {rc}", 500

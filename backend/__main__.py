@@ -1,3 +1,5 @@
-from .app import app
+from aiohttp import web
+from .async_app import app
 
-app.run(port=app.config["APP_PORT"], host=app.config["APP_HOST"], debug=app.config["APP_DEBUG"])
+
+web.run_app(app, port=app["port"], host=app["host"])

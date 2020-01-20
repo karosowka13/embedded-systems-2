@@ -8,9 +8,9 @@ from . import config
 
 routes = web.RouteTableDef()
 
-# app = Flask(__name__)
-# app.config.from_object("backend.config")
 app = web.Application()
+app["port"] = config.APP_PORT
+app["host"] = config.APP_HOST
 
 uart = UART(
     config.SERIAL_PORT,
@@ -72,7 +72,7 @@ async def semaphore(request):
         validate(args, schemas.semaphore_schema)
     except ValidationError as e:
         return web.Response(text=f"Invalid JSON sent: {e}", status=400)
-    rc = uart.get_semaphore(args)
+    rc = uart.give_semaphore(args)
     if rc == 0:
         return web.Response(text="OK")
     else:

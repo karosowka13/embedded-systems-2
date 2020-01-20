@@ -62,4 +62,4 @@ class UART:
         return rc
 
     def get_semaphore(self, idx):
-        pass
+        return int(self.read(f"gs {idx}"))

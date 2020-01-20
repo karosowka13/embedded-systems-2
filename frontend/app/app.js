@@ -43,6 +43,8 @@ const formToJSON = elements => [].reduce.call(elements, (data, element) =>{
     return data;
 }, {});
 
+const Url = 'windows.location.orgin';
+
 const handleFormSubmit = (form) =>{
   event.preventDefault();
 
@@ -51,8 +53,20 @@ const handleFormSubmit = (form) =>{
   const dataContainer = document.getElementsByClassName('results__display')[0];
   // Use `JSON.stringify()` to make the output human-readable JSON.
   dataContainer.textContent = JSON.stringify(data, null, "  ");
-
+    // postAjax('windows.location.origin', data, function(data){ console.log(data); });
+    $.ajax({
+        type:'POST',
+        url:'windows.location.orgin',
+        data: data,
+        dataType: 'json',
+        sucess: function(data){alert(data);},
+        failure: function(errMsg){alert(errMsg);
+        }
+    });
 };
+
+
+
 
 const task = document.getElementsByClassName('task')[0];
 const timer = document.getElementsByClassName('timer')[0];

@@ -1,0 +1,12 @@
+{
+  "title": "Semaphore",
+  "type": "object",
+  "properties": {
+    "index": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 7,
+      "description": "ID of semaphore to give"
+    }
+  }
+}

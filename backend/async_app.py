@@ -37,6 +37,46 @@ async def task1(request):
         return web.Response(text=f"Problem with UARt command. Return code: {rc}", status=500)
 
 
+@routes.post("/timer")
+async def timer(request):
+    args = await request.json()
+    try:
+        validate(args, schemas.timer_schema)
+    except ValidationError as e:
+        return web.Response(text=f"Invalid JSON sent: {e}", status=400)
+    rc = uart.manage_timer(args)
+    if rc == 0:
+        return web.Response(text="OK")
+    else:
+        return web.Response(text=f"Problem with UARt command. Return code: {rc}", status=500)
+
+
+@routes.post("/queue")
+async def queue(request):
+    args = await request.json()
+    try:
+        validate(args, schemas.queue_schema)
+    except ValidationError as e:
+        return web.Response(text=f"Invalid JSON sent: {e}", status=400)
+    rc = uart.queue_put(args)
+    if rc == 0:
+        return web.Response(text="OK")
+    else:
+        return web.Response(text=f"Problem with UARt command. Return code: {rc}", status=500)
+
+
+@routes.post("/semaphore")
+async def semaphore(request):
+    args = await request.json()
+    try:
+        validate(args, schemas.semaphore_schema)
+    except ValidationError as e:
+        return web.Response(text=f"Invalid JSON sent: {e}", status=400)
+    rc = uart.get_semaphore(args)
+    if rc == 0:
+        return web.Response(text="OK")
+    else:
+        return web.Response(text=f"Problem with UARt command. Return code: {rc}", status=500)
 
 
 app.add_routes(routes)

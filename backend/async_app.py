@@ -1,86 +1,42 @@
 from aiohttp import web
-
-
-routes = web.RouteTableDef()
-
 from jsonschema import validate, ValidationError
 
 from .uart import UART
 from . import schemas
+from . import config
 
+
+routes = web.RouteTableDef()
 
 # app = Flask(__name__)
 # app.config.from_object("backend.config")
+app = web.Application()
+
 uart = UART(
-    app.config["SERIAL_PORT"],
-    speed=app.config["SERIAL_SPEED"],
-    timeout=app.config["SERIAL_TIMEOUT"],
-    debug=app.config["APP_DEBUG"],
+    config.SERIAL_PORT,
+    speed=config.SERIAL_SPEED,
+    timeout=config.SERIAL_TIMEOUT,
+    debug=config.APP_DEBUG,
 )
 
 
-@routes.post(r'/{name:\d}')
-def task1(task_id):
+@routes.post(r"/task/{task_id:\d}")
+async def task1(request):
+    task_id = int(request.match_info["task_id"])
     if task_id not in uart.TASKS:
-        return f"Bas Task ID. Received: {task_id}. Allowed: {uart.TASKS}", 400
-    args = request.get_json()
+        return web.Response(text=f"Bas Task ID. Received: {task_id}. Allowed: {uart.TASKS}", status=400)
+    args = await request.json()
     try:
         validate(args, schemas.task_schema)
     except ValidationError as e:
-        return f"Invalid JSON sent: {e}", 400
+        return web.Response(text=f"Invalid JSON sent: {e}", status=400)
     rc = uart.manage_task(task_id, args)
     if rc == 0:
-        return "OK"
+        return web.Response(text="OK")
     else:
-        return f"Problem with UARt command. Return code: {rc}", 500
-
-
-@routes.post("/timer")
-def timer():
-    args = request.get_json()
-    try:
-        validate(args, schemas.timer_schema)
-    except ValidationError as e:
-        return f"Invalid JSON sent: {e}", 400
-    rc = uart.manage_timer(args)
-    if rc == 0:
-        return "OK"
-    else:
-        return f"Problem with UARt command. Return code: {rc}", 500
-
-
-@routes.post("/queue")
-def queue():
-    args = request.get_json()
-    try:
-        validate(args, schemas.queue_schema)
-    except ValidationError as e:
-        return f"Invalid JSON sent: {e}", 400
-    rc = uart.queue_put(args)
-    if rc == 0:
-        return "OK"
-    else:
-        return f"Problem with UARt command. Return code: {rc}", 500
-
-
-@routes.post("/semaphore")
-def semaphore():
-    args = request.get_json()
-    try:
-        validate(args, schemas.semaphore_schema)
-    except ValidationError as e:
-        return f"Invalid JSON sent: {e}", 400
-    rc = uart.get_semaphore(args)
-    if rc == 0:
-        return "OK"
-    else:
-        return f"Problem with UARt command. Return code: {rc}", 500
+        return web.Response(text=f"Problem with UARt command. Return code: {rc}", status=500)
 
 
 
 
-
-
-app = web.Application()
 app.add_routes(routes)
-web.run_app(app)

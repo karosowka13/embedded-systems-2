@@ -61,5 +61,9 @@ class UART:
             rc += int(self.read(f"pq {value}"))
         return rc
 
-    def get_semaphore(self, idx):
-        return int(self.read(f"gs {idx}"))
+    def get_semaphore(self, args):
+        idx = args.get("index")
+        rc = 0
+        if idx is not None:
+            rc += int(self.read(f"gs {idx}"))
+        return rc

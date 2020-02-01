@@ -15,9 +15,6 @@ class Serial:
         self._reader = None
         self._writer = None
 
-    # async def __del__(self):
-    #     await self.close()
-
     async def open(self):
         if not self.debug:
             self._reader, self._writer = await create_serial_connection(port=self.port, baudrate=self.speed)

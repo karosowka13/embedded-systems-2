@@ -1,8 +1,7 @@
 from serial_asyncio import create_serial_connection
 
 
-class UART:
-    TASKS = (1, 2, 3)
+class Serial:
 
     def __init__(self, port, speed=9600, debug=False):
         self.port = port

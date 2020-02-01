@@ -19,13 +19,15 @@ class Serial:
     #     await self.close()
 
     async def open(self):
-        self._reader, self._writer = await create_serial_connection(port=self.port, baudrate=self.speed)
+        if not self.debug:
+            self._reader, self._writer = await create_serial_connection(port=self.port, baudrate=self.speed)
         logger.info(f"Established connection on port {self.port}")
 
     async def close(self):
         logger.debug(f"Closing connection on port {self.port}")
-        self._writer.close()
-        await self._writer.wait_closed()
+        if not self.debug:
+            self._writer.close()
+            await self._writer.wait_closed()
         self._reader = None
         self._writer = None
         logger.info(f"Closed connection on port {self.port}")

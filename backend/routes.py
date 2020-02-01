@@ -64,3 +64,11 @@ async def semaphore(request):
         return web.Response(text="OK")
     else:
         return web.Response(text=f"Problem with UARt command. Return code: {rc}", status=500)
+
+
+@routes.get("/ws")
+async def websocket(request):
+    ws = web.WebSocketResponse()
+    await ws.prepare(request)
+
+    return ws

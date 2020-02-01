@@ -15,7 +15,6 @@ app["host"] = config.APP_HOST
 uart = UART(
     config.SERIAL_PORT,
     speed=config.SERIAL_SPEED,
-    timeout=config.SERIAL_TIMEOUT,
     debug=config.APP_DEBUG,
 )
 

@@ -1,4 +1,9 @@
+import logging
+
 from .serial import Serial
+
+
+logger = logging.getLogger(__name__)
 
 
 class UART(Serial):
@@ -8,6 +13,7 @@ class UART(Serial):
         priority = args.get("priority")
         duration = args.get("duration")
         rc = 0
+        logger.debug(f"Managing Task {idx}: priority {priority} and duration {duration}")
         if priority is not None:
             rc += int(await self.read(f"cpt{idx} {priority}"))
         if duration is not None:
@@ -18,6 +24,7 @@ class UART(Serial):
         control = args.get("running")
         period = args.get("period")
         semaphore = args.get("semaphore")
+        logger.debug(f"Managing timer: is running {control}, period {period} and semaphpre {semaphore}")
         rc = 0
         if control is not None:
             if control is True:
@@ -32,6 +39,7 @@ class UART(Serial):
 
     async def queue_put(self, args):
         value = args.get("value")
+        logger.debug(f"Putting value {value} to queue")
         rc = 0
         if value is not None:
             rc += int(await self.read(f"pq {value}"))
@@ -39,6 +47,7 @@ class UART(Serial):
 
     async def give_semaphore(self, args):
         idx = args.get("index")
+        logger.debug(f"Giving semaphore of index {idx}")
         rc = 0
         if idx is not None:
             rc += int(await self.read(f"gs {idx}"))

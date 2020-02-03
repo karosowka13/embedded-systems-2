@@ -116,6 +116,18 @@ Board can be programmed by sending UART commands defined in table below. General
 | ts | int [1-7] | 0, 4 - bad semaphore number | change samephore given by timer |
 | pq | int | 0 | put value to `Queue` |
 | gs | int [1-7] | 0, 4 - bad semaphore number | give choosen `Semaphore` |
+
+
+### LED connection
+
+Diode's cathodes should be connected to ground, while anodes to respective pins. Remember about current limiting resistor!
+| Task No | STM32 pin number |
+| - | - |
+| 1 | User diode / PA6 |
+| 2 | PB6 |
+| 3 | PA9 |
+
+
 ## Literature 
  - [Mastering The FreeRTOS](https://www.freertos.org/Documentation/161204_Mastering_the_FreeRTOS_Real_Time_Kernel-A_Hands-On_Tutorial_Guide.pdf)
  - [CMSIS-RTOS API v2](https://www.keil.com/pack/doc/CMSIS/RTOS2/html/group__CMSIS__RTOS.html)

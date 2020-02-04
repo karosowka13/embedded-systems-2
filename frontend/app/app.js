@@ -76,6 +76,9 @@ task.addEventListener('submit', function () {handleFormSubmit(task);});
 timer.addEventListener('submit', function () {handleFormSubmit(timer);});
 queue1.addEventListener('submit', function () {handleFormSubmit(queue1);});
 
+var term = new Terminal();
+term.open(document.getElementById('terminal'));
+setInterval(() => {term.write('\n\rHello from \033[1;3;31mxterm.js\033[0m $ ')}, 1000)
 
 
 

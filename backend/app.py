@@ -25,7 +25,7 @@ async def poll_uart(app):
             await asyncio.sleep(1)
             ret = await uart.read_line()
             for ws in websockets:
-                ws.send_str(ret)
+                await ws.send_str(ret)
     app["uart_poller"] = asyncio.create_task(read_uart(app["uart"], app["websockets"]))
     yield
     app["uart_poller"].cancel()

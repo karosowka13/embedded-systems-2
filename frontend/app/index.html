@@ -91,10 +91,10 @@
           <label for="value">Value</label>
           <input type="number" name="value" placeholder="Put value to queue">
           <button type="submit" id="submit">Set</button>
-        </form>
+        </form><br>
 
         <form class="semaphore">
-          <h2>Semaphore</h2><br>
+          <br><h2 id="semaphore_css">Semaphore</h2>
           <!-- <label for="select_semaphore">Semaphore </label> -->
           <select name="index" placeholder="Select ID of semaphore to change for timer...">
             <option value="">Select ID of semaphore for timer...</option>
@@ -114,16 +114,20 @@
     <div id="terminal"></div>
 
 
+
+
     <div class="row">
-      <div class="col-sm-6" id="congiguration">
-        <h2>Configuration</h2>
-        <ul class="list">
-          <li>set duration, priority of each Task</li>
-          <li>give Semaphore</li>
-          <li>put value to Queue</li>
-          <li>start, stop and change period of software Timer</li>
-          <li>change Semphore given by Timer</li>
-        </ul>
+      <div class="col-sm-12" id="help">
+        <div id="help">
+          <h2>Help</h2>
+          <ul class="list">
+            <li>Set duration (min.200), priority(in range 2-40) of each Task</li>
+            <li>Give Semaphore</li>
+            <li>Put value(in range 1-1000) to Queue</li>
+            <li>Start, stop and change period (500-5000) of software Timer</li>
+            <li>Change Semphore given by Timer</li>
+          </ul> 
+       </div>
       </div>
     </div>
 
@@ -133,72 +137,7 @@
         <pre class="results__display-wrapper"><code class="results__display"></code></pre>
       </div>
     </div>
-
-
-    <div class="row">
-      <div class="col-sm-12" id="help">
-        <div id="help">
-          <h1>Help</h1>
-          <h3>Task</h3>
-          <p1>There are 3 Tasks defined for purpose of experimenting: <code>myTask02</code> , <code>myTask03</code>,<code>myTask04</code> . On start, each tasks turns on LED assigned to it. On exit, it turns off the diode. There is Task defined for purpose of communication: uartRX. It have the highest priority.</p1>
-          <h3>Semaphores</h3>
-          <p1>3 Semaphores are defined. Each Semaphore triggers each Task.</p1>
-          <table class="table">
-            <thead class="thead-dark">
-              <tr>
-                <th scope="col">Semaphore</th>
-                <th scope="col">Task Trigerred</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>MyBinarySem01</td>
-                <td>MyTask02</td>
-              </tr>
-              <tr>
-                <td>MyBinarySem02</td>
-                <td>MyTask03</td>
-              </tr>
-              <tr>
-                <td>MyBinarySem02</td>
-                <td>MyTask04</td>
-              </tr>
-            </tbody>
-          </table>
-          <p1>Sempahore code is passed do gs command to give specific group of semaphores. Please refer to table below.</p1>
-          
-          <table class="table">
-            <thead class="thead-dark">
-              <tr>
-                <th scope="col">Semaphore Code</th>
-                <th scope="col">Semaphores given</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>MyBinarySem01</td>
-                <td>MyTask02</td>
-              </tr>
-              <tr>
-                <td>MyBinarySem02</td>
-                <td>MyTask03</td>
-              </tr>
-              <tr>
-                <td>MyBinarySem02</td>
-                <td>MyTask04</td>
-              </tr>
-            </tbody>
-          </table>
-          <p1>Task uartRX is triggered via semaphore uartRX.<br>         
-          uartRX sempahore is set in UART Rx interrupt when there '\n' char detected.</p1>
-          <h3>Queue</h3>
-          <h3>Software timers</h3>
-          <h3>Parameters</h3>
-          <h3>LED connection</h3>
-          <p1>Diode's cathodes should be connected to ground, while anodes to respective pins. Remember about current limiting resistor! | Task No | STM32 pin number | | - | - | | 1 | User diode / PA6 | | 2 | PB6 | | 3 | PA9 |</p1>
-        </div>
-      </div>
-    </div>
+    
     <script src="../jquery-3.4.1.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script src="app.js"></script>

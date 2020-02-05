@@ -32,6 +32,7 @@ class Serial:
     def write(self, msg):
         if self._writer is not None:
             logger.debug(f"Writing message {msg!r}")
+            msg = msg.ljust(12)
             self._writer.write(msg.encode("ascii"))
 
     async def write_read(self, msg):

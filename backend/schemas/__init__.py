@@ -15,3 +15,5 @@ with (_base_dir / "queueschema.json").open("r") as fp:
 
 with (_base_dir / "semaphoreschema.json").open("r") as fp:
     semaphore_schema = json.load(fp)
+
+del _base_dir, Path, json

@@ -181,10 +181,11 @@ code {
 }
 
 #terminal {
-  margin: 10px 10px 50px 10px;
+  margin: 50px 0px 50px 0px;
 }
 
 #help {
+  margin-bottom: 50px;
   background: #61892F;
   background: -moz-linear-gradient(left, #61892F 0%, #61892F 15%, #222629 100%);
   background: -webkit-linear-gradient(left, #61892F 0%, #61892F 15%, #222629 100%);

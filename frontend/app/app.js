@@ -109,7 +109,7 @@ semaphore.addEventListener('submit', function () {handleFormSubmitSemaphore(sema
 
 var term = new Terminal();
 term.open(document.getElementById('terminal'));
-term.write("FreeRTOS-board $")
+term.write("\r FreeRTOS-board $")
 var socket = new WebSocket("ws://192.168.0.29:5000/ws")
 socket.onmessage = function (event) {
     if (event.data){

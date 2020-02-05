@@ -64,7 +64,7 @@ async def semaphore(request):
 async def websocket(request):
     ws = web.WebSocketResponse()
     await ws.prepare(request)
-    request.app["websockets"].append(ws)
+    request.app["websocket"] = ws
 
     async for msg in ws:
         logger.debug("New message in websocket")
@@ -74,7 +74,6 @@ async def websocket(request):
                 if msg.data == "close":
                     logger.info("Closing web socket on user request")
                     await ws.close()
-                    request.app["websockets"].remove(ws)
                     logger.debug("Web socket closed")
             elif msg.type == WSMsgType.ERROR:
                 logger.error(f"Web socket connection closed with exception: {ws.exception()}")

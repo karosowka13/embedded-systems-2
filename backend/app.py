@@ -26,16 +26,16 @@ async def uart_conn(app):
 # it may be better to create polling task only when there's one client and cancel it when there's no client at all
 # however current implementation is simpler
 async def poll_uart(app):
-    async def read_uart(uart, websockets):
+    async def read_uart(uart, websocket):
         while True:
             try:
                 await asyncio.sleep(1)
                 ret = await uart.read_line()
-                for ws in websockets:
-                    await ws.send_str(ret)
+                if websocket is not None:
+                    await websocket.send_str(ret)
             except Exception as e:
                 logger.error(f"Exception when reading uart: {e}")
-    app["uart_poller"] = asyncio.create_task(read_uart(app["uart"], app["websockets"]))
+    app["uart_poller"] = asyncio.create_task(read_uart(app["uart"], app["websocket"]))
     yield
     app["uart_poller"].cancel()
     await app["uart_poller"]
@@ -43,7 +43,7 @@ async def poll_uart(app):
 app = web.Application(debug=config.APP_DEBUG)
 app["port"] = config.APP_PORT
 app["host"] = config.APP_HOST
-app["websockets"] = list()
+app["websocket"] = None
 
 app.cleanup_ctx.append(uart_conn)
 app.cleanup_ctx.append(poll_uart)

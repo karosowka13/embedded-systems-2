@@ -1,9 +1,12 @@
-from aiohttp import web
+import logging
+
+from aiohttp import web, WSMsgType
 from jsonschema import validate, ValidationError
 
 from . import schemas
 
 
+logger = logging.getLogger(__name__)
 routes = web.RouteTableDef()
 
 
@@ -70,5 +73,14 @@ async def semaphore(request):
 async def websocket(request):
     ws = web.WebSocketResponse()
     await ws.prepare(request)
+
+    async for msg in ws:
+        if msg.type == WSMsgType.TEXT:
+            if msg.data == "close":
+                logger.info("Closing web socket on user request")
+                await ws.close()
+                logger.debug("Web socket closed")
+        elif msg.type == WSMsgType.ERROR:
+            logger.error(f"Web socket connection closed with exception: {ws.exception()}")
 
     return ws

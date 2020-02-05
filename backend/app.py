@@ -11,6 +11,9 @@ from . import routes
 
 logger = logging.getLogger(__name__)
 
+if config.APP_DEBUG:
+    logger.debug("Running in debug mode")
+
 
 async def uart_conn(app):
     app["uart"] = UART(

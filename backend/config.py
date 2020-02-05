@@ -12,6 +12,6 @@ def load_from_env(name):
 
 APP_PORT = load_from_env("APP_PORT")
 APP_HOST = load_from_env("APP_HOST")
-APP_DEBUG = load_from_env("APP_DEBUG")
+APP_DEBUG = load_from_env("APP_DEBUG") == "True"
 SERIAL_PORT = load_from_env("SERIAL_PORT")
 SERIAL_SPEED = load_from_env("SERIAL_SPEED")

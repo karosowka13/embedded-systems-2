@@ -16,6 +16,13 @@ Visit type IP of RPi in browser to use application.
 
 ### Steps
 
+Set Timer to following properties in UI:
+
+ - running: true
+ - period: 1000
+ - semaphore_given: 1
+
+Observe diode blinking with frequency 1 Hz.
 ## The 'HOW' part
 In this part your will learn how to use FreeRTOS API to program `Software Timer` functionality.
 

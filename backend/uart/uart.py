@@ -54,4 +54,4 @@ class UART(Serial):
         return rc
 
     async def read_line(self):
-        return await self.read(end="\n")
+        return await self.read()

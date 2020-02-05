@@ -12,46 +12,36 @@ class UART(Serial):
         idx = args["index"]
         priority = args.get("priority")
         duration = args.get("duration")
-        rc = 0
         logger.debug(f"Managing Task {idx}: priority {priority} and duration {duration}")
         if priority is not None:
-            rc += int(await self.write_read(f"cpt{idx} {priority}"))
+            await self.write_read(f"cpt{idx} {priority}")
         if duration is not None:
-            rc += int(await self.write_read(f"cdt{idx} {duration}"))
-        return rc
+            await self.write_read(f"cdt{idx} {duration}")
 
     async def manage_timer(self, args):
         control = args.get("running")
         period = args.get("period")
         semaphore = args.get("semaphore")
         logger.debug(f"Managing timer: is running {control}, period {period} and semaphore {semaphore}")
-        rc = 0
         if control is not None:
             if control is True:
-                rc += int(await self.write_read("sta_t"))
+                await self.write_read("sta_t")
             else:
-                rc += int(await self.write_read("sto_t"))
+                await self.write_read("sto_t")
         if period is not None:
-            rc += int(await self.write_read(f"tp {period}"))
+            await self.write_read(f"tp {period}")
+        logger.debug(f"Semaphore: value: {semaphore!r}, type: {type(semaphore)}")
         if semaphore is not None:
-            rc += int(await self.write_read(f"tc {semaphore}"))
-        return rc
+            await self.write_read(f"ts {semaphore}")
 
     async def queue_put(self, args):
         value = args.get("value")
         logger.debug(f"Putting value {value} to queue")
-        rc = 0
         if value is not None:
-            rc += int(await self.write_read(f"pq {value}"))
-        return rc
+            await self.write_read(f"pq {value}")
 
     async def give_semaphore(self, args):
         idx = args.get("index")
         logger.debug(f"Giving semaphore of index {idx}")
-        rc = 0
         if idx is not None:
-            rc += int(await self.write_read(f"gs {idx}"))
-        return rc
-
-    async def read_line(self):
-        return await self.read()
+            await self.write_read(f"gs {idx}")

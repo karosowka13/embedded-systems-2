@@ -1,5 +1,4 @@
 import logging
-import asyncio
 
 from serial_asyncio import open_serial_connection
 
@@ -15,7 +14,6 @@ class Serial:
         self.debug = debug
         self._reader = None
         self._writer = None
-        self.lock = asyncio.Lock()
 
     async def open(self):
         if not self.debug:
@@ -46,8 +44,7 @@ class Serial:
 
     async def read(self):
         if self._reader is not None:
-            async with self.lock:
-                ret = await self._reader.readline()
+            ret = await self._reader.readline()
             ret.decode("ascii")
             logger.debug(f"Received message {ret!r}")
             return ret

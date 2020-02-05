@@ -15,11 +15,8 @@ async def task(request):
         validate(args, schemas.task_schema)
     except ValidationError as e:
         return web.Response(text=f"Invalid JSON sent: {e}", status=400)
-    rc = await request.app["uart"].manage_task(args)
-    if rc == 0:
-        return web.Response(text="OK")
-    else:
-        return web.Response(text=f"Problem with UARt command. Return code: {rc}", status=500)
+    await request.app["uart"].manage_task(args)
+    return web.Response(text="OK")
 
 
 async def timer(request):
@@ -28,11 +25,8 @@ async def timer(request):
         validate(args, schemas.timer_schema)
     except ValidationError as e:
         return web.Response(text=f"Invalid JSON sent: {e}", status=400)
-    rc = await request.app["uart"].manage_timer(args)
-    if rc == 0:
-        return web.Response(text="OK")
-    else:
-        return web.Response(text=f"Problem with UARt command. Return code: {rc}", status=500)
+    await request.app["uart"].manage_timer(args)
+    return web.Response(text="OK")
 
 
 async def queue(request):
@@ -41,11 +35,8 @@ async def queue(request):
         validate(args, schemas.queue_schema)
     except ValidationError as e:
         return web.Response(text=f"Invalid JSON sent: {e}", status=400)
-    rc = await request.app["uart"].queue_put(args)
-    if rc == 0:
-        return web.Response(text="OK")
-    else:
-        return web.Response(text=f"Problem with UARt command. Return code: {rc}", status=500)
+    await request.app["uart"].queue_put(args)
+    return web.Response(text="OK")
 
 
 async def semaphore(request):
@@ -54,11 +45,8 @@ async def semaphore(request):
         validate(args, schemas.semaphore_schema)
     except ValidationError as e:
         return web.Response(text=f"Invalid JSON sent: {e}", status=400)
-    rc = await request.app["uart"].give_semaphore(args)
-    if rc == 0:
-        return web.Response(text="OK")
-    else:
-        return web.Response(text=f"Problem with UARt command. Return code: {rc}", status=500)
+    await request.app["uart"].give_semaphore(args)
+    return web.Response(text="OK")
 
 
 async def websocket(request):

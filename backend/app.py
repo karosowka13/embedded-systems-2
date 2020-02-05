@@ -32,7 +32,8 @@ async def poll_uart(app):
     async def read_uart(uart, websocket):
         while True:
             try:
-                ret = await uart.read_line()
+                # await asyncio.sleep(1)
+                ret = await uart.read()
                 if websocket is not None:
                     await websocket.send_str(ret)
             except Exception as e:

@@ -53,6 +53,5 @@ class UART(Serial):
             rc += int(await self.write_read(f"gs {idx}"))
         return rc
 
-    async def read_data(self):
-        # waiting for details to implement it
-        return ""
+    async def read_line(self):
+        return await self.read(end="\n")

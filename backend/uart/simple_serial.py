@@ -38,14 +38,16 @@ class Serial:
     async def write_read(self, msg):
         if self._reader is not None:
             self.write(msg)
-            ret = await self._reader.readline().decode("ascii")
+            ret = await self._reader.readline()
+            ret.decode("ascii")
             logger.debug(f"Received message {ret!r}")
             return ret
         return "0"
 
     async def read(self, end="\n"):
         if self._reader is not None:
-            ret = await self._reader.read_until(end).decode("ascii")
+            ret = await self._reader.readuntil(end)
+            ret.decode("ascii")
             logger.debug(f"Received message {ret!r}")
             return ret
         return "\n"

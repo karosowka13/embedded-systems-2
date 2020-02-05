@@ -10,15 +10,12 @@ logger = logging.getLogger(__name__)
 
 
 async def task(request):
-    task_id = int(request.match_info["task_id"])
-    if task_id not in request.app["uart"].TASKS:
-        return web.Response(text=f"Bas Task ID. Received: {task_id}. Allowed: {request.app['uart'].TASKS}", status=400)
     args = await request.json()
     try:
         validate(args, schemas.task_schema)
     except ValidationError as e:
         return web.Response(text=f"Invalid JSON sent: {e}", status=400)
-    rc = await request.app["uart"].manage_task(task_id, args)
+    rc = await request.app["uart"].manage_task(args)
     if rc == 0:
         return web.Response(text="OK")
     else:

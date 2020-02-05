@@ -2,6 +2,12 @@
   "title": "Task",
   "type": "object",
   "properties": {
+    "index": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 3,
+      "description": "ID of task"
+    },
     "duration": {
       "type": "integer",
       "description": "Duration of task"

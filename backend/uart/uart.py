@@ -7,9 +7,9 @@ logger = logging.getLogger(__name__)
 
 
 class UART(Serial):
-    TASKS = (1, 2, 3)
 
-    async def manage_task(self, idx, args):
+    async def manage_task(self, args):
+        idx = args["index"]
         priority = args.get("priority")
         duration = args.get("duration")
         rc = 0

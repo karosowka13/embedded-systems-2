@@ -60,7 +60,7 @@ cors = aiohttp_cors.setup(app, defaults={
 ws_resource = cors.add(app.router.add_resource("/ws"))
 cors.add(ws_resource.add_route("GET", routes.websocket))
 
-task_resource = cors.add(app.router.add_resource(r"/task/{task_id:\d}"))
+task_resource = cors.add(app.router.add_resource("/task"))
 cors.add(task_resource.add_route("POST", routes.task))
 
 timer_resource = cors.add(app.router.add_resource("/timer"))

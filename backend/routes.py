@@ -70,6 +70,7 @@ async def websocket(request):
     request.app["websockets"].append(ws)
 
     async for msg in ws:
+        logger.debug("New message in websocket")
         try:
             if msg.type == WSMsgType.TEXT:
                 logger.debug(f"Message received: {msg!r}")

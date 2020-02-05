@@ -2,13 +2,15 @@ import logging
 
 import asyncio
 from aiohttp import web
+import aiohttp_cors
 
 from .uart import UART
 from . import config
-from .routes import routes
+from . import routes
 
 
 logger = logging.getLogger(__name__)
+
 
 async def uart_conn(app):
     app["uart"] = UART(
@@ -46,4 +48,24 @@ app["websockets"] = list()
 app.cleanup_ctx.append(uart_conn)
 app.cleanup_ctx.append(poll_uart)
 
-app.add_routes(routes)
+cors = aiohttp_cors.setup(app, defaults={
+    "*": aiohttp_cors.ResourceOptions(
+        allow_credentials=False,
+        max_age=3600,
+    )
+})
+
+ws_resource = cors.add(app.router.add_resource("/ws"))
+cors.add(ws_resource.add_route("GET", routes.websocket))
+
+task_resource = cors.add(app.router.add_resource(r"/task/{task_id:\d}"))
+cors.add(task_resource.add_route("POST", routes.task))
+
+timer_resource = cors.add(app.router.add_resource("/timer"))
+cors.add(timer_resource.add_route("POST", routes.timer))
+
+queue_resource = cors.add(app.router.add_resource("/queue"))
+cors.add(queue_resource.add_route("POST", routes.queue))
+
+semaphore_resource = cors.add(app.router.add_resource("/semaphore"))
+cors.add(semaphore_resource.add_route("POST", routes.semaphore))

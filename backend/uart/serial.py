@@ -1,6 +1,6 @@
 import logging
 
-from serial_asyncio import create_serial_connection
+from serial_asyncio import open_serial_connection
 
 
 logger = logging.getLogger(__name__)
@@ -17,7 +17,7 @@ class Serial:
 
     async def open(self):
         if not self.debug:
-            self._reader, self._writer = await create_serial_connection(port=self.port, baudrate=self.speed)
+            self._reader, self._writer = await open_serial_connection(port=self.port, baudrate=self.speed)
         logger.info(f"Established connection on port {self.port}")
 
     async def close(self):

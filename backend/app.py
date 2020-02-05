@@ -1,3 +1,5 @@
+import logging
+
 import asyncio
 from aiohttp import web
 
@@ -5,6 +7,8 @@ from .uart import UART
 from . import config
 from .routes import routes
 
+
+logger = logging.getLogger(__name__)
 
 async def uart_conn(app):
     app["uart"] = UART(
@@ -22,10 +26,13 @@ async def uart_conn(app):
 async def poll_uart(app):
     async def read_uart(uart, websockets):
         while True:
-            await asyncio.sleep(1)
-            ret = await uart.read_line()
-            for ws in websockets:
-                await ws.send_str(ret)
+            try:
+                await asyncio.sleep(1)
+                ret = await uart.read_line()
+                for ws in websockets:
+                    await ws.send_str(ret)
+            except Exception as e:
+                logger.error(f"Exception when reading uart: {e}")
     app["uart_poller"] = asyncio.create_task(read_uart(app["uart"], app["websockets"]))
     yield
     app["uart_poller"].cancel()

@@ -7,11 +7,11 @@ from . import schemas
 
 
 logger = logging.getLogger(__name__)
-routes = web.RouteTableDef()
+# routes = web.RouteTableDef()
 
 
-@routes.post(r"/task/{task_id:\d}")
-async def task1(request):
+# @routes.post(r"/task/{task_id:\d}")
+async def task(request):
     task_id = int(request.match_info["task_id"])
     if task_id not in request.app["uart"].TASKS:
         return web.Response(text=f"Bas Task ID. Received: {task_id}. Allowed: {request.app['uart'].TASKS}", status=400)
@@ -27,7 +27,7 @@ async def task1(request):
         return web.Response(text=f"Problem with UARt command. Return code: {rc}", status=500)
 
 
-@routes.post("/timer")
+# @routes.post("/timer")
 async def timer(request):
     args = await request.json()
     try:
@@ -41,7 +41,7 @@ async def timer(request):
         return web.Response(text=f"Problem with UARt command. Return code: {rc}", status=500)
 
 
-@routes.post("/queue")
+# @routes.post("/queue")
 async def queue(request):
     args = await request.json()
     try:
@@ -55,7 +55,7 @@ async def queue(request):
         return web.Response(text=f"Problem with UARt command. Return code: {rc}", status=500)
 
 
-@routes.post("/semaphore")
+# @routes.post("/semaphore")
 async def semaphore(request):
     args = await request.json()
     try:
@@ -69,7 +69,7 @@ async def semaphore(request):
         return web.Response(text=f"Problem with UARt command. Return code: {rc}", status=500)
 
 
-@routes.get("/ws")
+# @routes.get("/ws")
 async def websocket(request):
     ws = web.WebSocketResponse()
     await ws.prepare(request)

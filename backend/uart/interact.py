@@ -1,7 +1,7 @@
 import asyncio
 import sys
 
-from .serial import Serial
+from .simple_serial import Serial
 
 
 async def main(port, speed):

@@ -1,6 +1,6 @@
 import logging
 
-from .serial import Serial
+from .simple_serial import Serial
 
 
 logger = logging.getLogger(__name__)

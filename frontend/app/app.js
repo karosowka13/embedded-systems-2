@@ -47,8 +47,12 @@ const handleFormSubmitTask = (form) =>{
   event.preventDefault()
   const data = formToJSON(form.elements)
   data.index = parseInt(data.index,10)
-  data.duration = parseInt(data.duration, 10)
-  data.priority = parseInt(data.priority)
+  if (data.duration){
+      data.duration = parseInt(data.duration, 10)
+  }
+  if (data.priority) {
+      data.priority = parseInt(data.priority)
+  }
   url = "http://192.168.0.29:5000/task"
     make_request(url, data)
 };
@@ -57,8 +61,13 @@ const handleFormSubmitTimer = (form) =>{
     event.preventDefault()
     const data = formToJSON(form.elements)
     data.running = (data.running == 'true')
-    data.period = parseInt(data.period, 10)
-    data.semaphore = parseInt(data.semaphore)
+    
+    if (data.period){
+        data.period = parseInt(data.period, 10)
+    }
+    if (data.semaphore){
+        data.semaphore = parseInt(data.semaphore)
+    }
     url = "http://192.168.0.29:5000/timer"
       make_request(url, data)
   };

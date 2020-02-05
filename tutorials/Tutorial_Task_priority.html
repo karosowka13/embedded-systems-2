@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Task priority FreeRTOS</title>
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+        
+        <style>
+.task-list-item { list-style-type: none; } .task-list-item-checkbox { margin-left: -20px; vertical-align: middle; }
+</style>
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        
+        
+    </head>
+    <body class="vscode-light">
+        <h1 id="task-priority-freertos">Task priority FreeRTOS</h1>
+<h2 id="introduction">Introduction</h2>
+<p>Tasks enable us to divide whole programme into smaller tasks in order to make implementation of functionalities easiest. Moreover the communication between tasks and time dependencies are assigned to the system not to the programmer.</p>
+<h4 id="what-is-the-task">What is the TASK</h4>
+<p>Each task is responsible for implementation of a cpecific functionality, which is performed in infinite loop.
+What is more, every task has its own stack and set of processor registers. The size of the stack is implemented during its creation therfore it is tailored to the assignment.
+While task is switched, actual contexts is saved. So task continue its work from the point which lately was finished, NOT from the begginig.
+As you can see context switching required numerous activities from processor and this time taken for working of the system, not execution of task. What is more, the time is longer on the basis of number of registers and size of the stack.</p>
+<h4 id="states-of-the-task">States of the task</h4>
+<p>In one moment only one task is executed. So what are the others statuses?</p>
+<ul>
+<li>Running -&gt; performed task.</li>
+<li>Ready -&gt; task which is not, but CAN be executed. Is it information for the scheduler that it can run this task at the expense of another.</li>
+<li>Blocked -&gt; this task can NOT be done, because it require the passage of specific time or it waits for appearance of specific event.</li>
+<li>Suspended -&gt; task is turned off and is not considered by the scheduler. It can not be executed untill its unblocked by particular function.</li>
+</ul>
+<h2 id="programme">Programme</h2>
+<p>Now you can consider how tasks are changed and how often operating system verify wheter the change of the context is needed. Everything is happening because of System Tick. Frequency of the System Tick is much more lower in comparision with frequency of processor clock. The time is configured manually via macro configTICK_RATE_HZ in configuation file.</p>
+<pre><code class="language-c"><div> <span class="hljs-function">BaseType_t <span class="hljs-title">xTaskCreate</span><span class="hljs-params">( TaskFunction_t pvTaskCode,
+                         <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> * <span class="hljs-keyword">const</span> pcName,
+                         <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">short</span> usStackDepth,
+                         <span class="hljs-keyword">void</span> *pvParameters,
+                         UBaseType_t uxPriority,
+                         TaskHandle_t *pxCreatedTask
+                        )</span></span>;
+</div></code></pre>
+<h2 id="freertos-api-details">FreeRTOS API Details</h2>
+<p><strong>xTaskCreate()</strong>: This interface is used to create a new Task, if the task is successfully created then it returns pdPass(1) or else errCOULD_NOT_ALLOCATE_REQUIRED_MEMORY(-1).</p>
+<p><strong>vTaskDelay()</strong>: This function is used to delay/block the task for specified delay time(ticks). INCLUDE_vTaskDelay needs to be set to 1 in FreeRtosConfig.h file for using this function.</p>
+<p><strong>vTaskPrioritySet()</strong>: This function is used to change/Set the priority of a task.
+For this we need to pass the handle of the task and new priority to vTaskPrioritySet() function.</p>
+<p><strong>vTaskPriorityGet()</strong>: This function is used to get the priority of a task.
+For this, we need to pass the handle of the task and it will return the task.</p>
+<h1 id="to-do">To do</h1>
+<h3 id="prequisites">Prequisites</h3>
+<ul>
+<li>STM32F303RE nucleo board</li>
+<li><a href="https://www.st.com/en/development-tools/stm32cubeide.html">CubeIDE</a> v1.1.0 or higher</li>
+<li><a href="foo.com">Base project</a> downloaded</li>
+</ul>
+<p>Create two tasks with priorities 1 and 2. Moreover idle task should be also created which priority is by defaul 0.</p>
+<pre><code class="language-c"><div> xTaskCreate(MyTask1, <span class="hljs-string">"Task1"</span>, <span class="hljs-number">100</span>, <span class="hljs-literal">NULL</span>, <span class="hljs-number">1</span>, <span class="hljs-literal">NULL</span>);
+ xTaskCreate(MyTask2, <span class="hljs-string">"Task2"</span>, <span class="hljs-number">100</span>, <span class="hljs-literal">NULL</span>, <span class="hljs-number">2</span>, <span class="hljs-literal">NULL</span>);
+ xTaskCreate(MyIdleTask, <span class="hljs-string">"IdleTask"</span>, <span class="hljs-number">100</span>, <span class="hljs-literal">NULL</span>, <span class="hljs-number">0</span>, <span class="hljs-literal">NULL</span>);
+</div></code></pre>
+<p>Apply delay 100, 150 and 50 to each task and match the LED to them to.</p>
+<pre><code class="language-c"><div><span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">MyTask1</span><span class="hljs-params">(<span class="hljs-keyword">void</span>* pvParameters)</span>
+</span>{
+  <span class="hljs-keyword">while</span>(<span class="hljs-number">1</span>)
+  { 
+    LED_turn_on(LED1);
+    vTaskDelay(<span class="hljs-number">100</span>/portTICK_PERIOD_MS);
+  }
+}
+</div></code></pre>
+<h3 id="expected-results">Expected results:</h3>
+<p>The controller starts the execution from setup function. The Serial port is initialized at 9600 baud rate and setup message is printed.</p>
+<p>Later 3-Tasks(Task1, Task2 and Idle) are created in order with priorities 2,1,0. At the end of the Setup function, scheduler/kernel takes the control.</p>
+<p>There are 3-tasks in the Ready state and since Task2 has the highest priority it will run first and goes to block state for 150ms.</p>
+<p>Now 2-tasks are available for scheduler and it chooses Task1 as it is the available higher priority task.
+Now Task1 runs for some time and then goes to blocked state for 100ms.</p>
+<p>CPU is left out with the Idle task and it starts running.</p>
+<p>Task2 will be in blocked state for 150ms and task1 will 100ms. So task1 will come out of blocked state first.</p>
+<p>After Task1 waiting time is elapsed, it comes to the Ready state. Since it has got higher priority compared to the Idle task, it will preempt Idle task and starts running. It again goes to blocked state for 100ms.</p>
+<p>Now CPU is left out with IDLE task and it starts running it.</p>
+<p>After Task2 waiting time is elapsed, it comes to the Ready state. Since it has got higher priority compared to the Idle task, it will preempt Idle task and starts running. It again goes to blocked state for 150ms.</p>
+<p>Same thing continues.</p>
+
+    </body>
+    </html>

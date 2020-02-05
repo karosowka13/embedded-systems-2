@@ -52,3 +52,7 @@ class UART(Serial):
         if idx is not None:
             rc += int(await self.read(f"gs {idx}"))
         return rc
+
+    async def read_data(self):
+        # waiting for details to implement it
+        return ""

@@ -24,13 +24,13 @@ class UART(Serial):
         control = args.get("running")
         period = args.get("period")
         semaphore = args.get("semaphore")
-        logger.debug(f"Managing timer: is running {control}, period {period} and semaphpre {semaphore}")
+        logger.debug(f"Managing timer: is running {control}, period {period} and semaphore {semaphore}")
         rc = 0
         if control is not None:
             if control is True:
-                self.write("sta_t")
+                rc += int(await self.write_read("sta_t"))
             else:
-                self.write("sto_t")
+                rc += int(await self.write_read("sto_t"))
         if period is not None:
             rc += int(await self.write_read(f"tp {period}"))
         if semaphore is not None:

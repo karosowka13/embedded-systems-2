@@ -8,9 +8,9 @@ osThreadId_t* threads_p[TASKS] = {
 };
 
 uint32_t tasks_duration[TASKS] = {
-    100,
-    100,
-    100,
+    500,
+    500,
+    500,
 };
 
 uint32_t timer_period = 1000;

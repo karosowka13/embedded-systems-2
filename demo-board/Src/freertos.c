@@ -216,7 +216,7 @@ osKernelInitialize();
     .stack_size = sizeof(myTask03Buffer),
     .cb_mem = &myTask03ControlBlock,
     .cb_size = sizeof(myTask03ControlBlock),
-    .priority = (osPriority_t) osPriorityBelowNormal,
+    .priority = (osPriority_t) osPriorityBelowNormal1,
   };
   myTask03Handle = osThreadNew(StartTask03, NULL, &myTask03_attributes);
 
@@ -227,7 +227,7 @@ osKernelInitialize();
     .stack_size = sizeof(myTask04Buffer),
     .cb_mem = &myTask04ControlBlock,
     .cb_size = sizeof(myTask04ControlBlock),
-    .priority = (osPriority_t) osPriorityBelowNormal,
+    .priority = (osPriority_t) osPriorityBelowNormal2,
   };
   myTask04Handle = osThreadNew(StartTask04, NULL, &myTask04_attributes);
 
@@ -283,11 +283,12 @@ void StartTask02(void *argument)
   {
     // osDelay(1);
     osSemaphoreAcquire(myBinarySem01Handle, osWaitForever);
-    LED_turn_on(LED_TEST);
     if(osOK == osMessageQueueGet(myQueue01Handle, &to_process, NULL, 0)){
       send(to_process * 2);
     };
-    osStatus_t ret = osDelay(get_duration_task1());
+    LED_turn_on(LED_TEST);
+    for (uint32_t i = 0; i <  get_duration_task1() * 1000; i++) {	}
+//    HAL_Delay(get_duration_task1());
     LED_turn_off(LED_TEST);
 
   }
@@ -310,11 +311,12 @@ void StartTask03(void *argument)
   for(;;)
   {
 	osSemaphoreAcquire(myBinarySem02Handle, osWaitForever);
-	LED_turn_on(LED2);
 	if(osOK == osMessageQueueGet(myQueue01Handle, &to_process, NULL, 0)){
       send(to_process * 3);
 	};
-	osStatus_t ret = osDelay(get_duration_task1());
+	LED_turn_on(LED2);
+	for (uint32_t i = 0; i <  get_duration_task2() * 1000; i++) {	}
+//	HAL_Delay(get_duration_task1());
 	LED_turn_off(LED2);
 
   }
@@ -337,11 +339,12 @@ void StartTask04(void *argument)
   for(;;)
   {
 	osSemaphoreAcquire(myBinarySem03Handle, osWaitForever);
-	LED_turn_on(LED3);
 	if(osOK == osMessageQueueGet(myQueue01Handle, &to_process, NULL, 0)){
       send(to_process * 4);
 	};
-	osStatus_t ret = osDelay(get_duration_task1());
+	LED_turn_on(LED3);
+	for (uint32_t i = 0; i <  get_duration_task3() * 1000; i++) {	}
+//	HAL_Delay(get_duration_task1());
 	LED_turn_off(LED3);
   }
   /* USER CODE END StartTask04 */

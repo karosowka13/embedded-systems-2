@@ -20,7 +20,7 @@ async def task(request):
         validate(args, schemas.task_schema)
     except ValidationError as e:
         return web.Response(text=f"Invalid JSON sent: {e}", status=400)
-    rc = request.app["uart"].manage_task(task_id, args)
+    rc = await request.app["uart"].manage_task(task_id, args)
     if rc == 0:
         return web.Response(text="OK")
     else:
@@ -34,7 +34,7 @@ async def timer(request):
         validate(args, schemas.timer_schema)
     except ValidationError as e:
         return web.Response(text=f"Invalid JSON sent: {e}", status=400)
-    rc = request.app["uart"].manage_timer(args)
+    rc = await request.app["uart"].manage_timer(args)
     if rc == 0:
         return web.Response(text="OK")
     else:
@@ -48,7 +48,7 @@ async def queue(request):
         validate(args, schemas.queue_schema)
     except ValidationError as e:
         return web.Response(text=f"Invalid JSON sent: {e}", status=400)
-    rc = request.app["uart"].queue_put(args)
+    rc = await request.app["uart"].queue_put(args)
     if rc == 0:
         return web.Response(text="OK")
     else:
@@ -62,7 +62,7 @@ async def semaphore(request):
         validate(args, schemas.semaphore_schema)
     except ValidationError as e:
         return web.Response(text=f"Invalid JSON sent: {e}", status=400)
-    rc = request.app["uart"].give_semaphore(args)
+    rc = await request.app["uart"].give_semaphore(args)
     if rc == 0:
         return web.Response(text="OK")
     else:

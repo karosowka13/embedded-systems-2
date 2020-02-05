@@ -105,6 +105,7 @@ int8_t change_semaphore_code_released(uint32_t code) {
         return 4;
     } else {
         semaphore_code = code;
+        return 0;
     }
 }
 uint32_t get_semaphore_code_released(){

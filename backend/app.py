@@ -50,6 +50,8 @@ app.cleanup_ctx.append(poll_uart)
 
 cors = aiohttp_cors.setup(app, defaults={
     "*": aiohttp_cors.ResourceOptions(
+        allow_headers="*",
+        allow_methods="*",
         allow_credentials=False,
         max_age=3600,
     )

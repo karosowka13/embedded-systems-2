@@ -22,7 +22,7 @@ async def uart_conn(app):
 async def poll_uart(app):
     async def read_uart(uart, websockets):
         while True:
-            # await asyncio.sleep(1)
+            await asyncio.sleep(1)
             ret = await uart.read_line()
             for ws in websockets:
                 ws.send_str(ret)
@@ -34,6 +34,7 @@ async def poll_uart(app):
 app = web.Application(debug=config.APP_DEBUG)
 app["port"] = config.APP_PORT
 app["host"] = config.APP_HOST
+app["websockets"] = list()
 
 app.cleanup_ctx.append(uart_conn)
 app.cleanup_ctx.append(poll_uart)

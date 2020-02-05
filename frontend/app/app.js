@@ -43,43 +43,69 @@ const formToJSON = elements => [].reduce.call(elements, (data, element) =>{
     return data;
 }, {});
 
-const Url = 'windows.location.orgin';
+const handleFormSubmitTask = (form) =>{
+  event.preventDefault()
+  const data = formToJSON(form.elements)
+  data.index = parseInt(data.index,10)
+  data.duration = parseInt(data.duration, 10)
+  data.priority = parseInt(data.priority)
+  url = "http://192.168.0.29:5000/task"
+    make_request(url, data)
+};
 
-const handleFormSubmit = (form) =>{
-  event.preventDefault();
+const handleFormSubmitTimer = (form) =>{
+    event.preventDefault()
+    const data = formToJSON(form.elements)
+    data.running = (data.running == 'true')
+    data.period = parseInt(data.period, 10)
+    data.semaphore = parseInt(data.semaphore)
+    url = "http://192.168.0.29:5000/timer"
+      make_request(url, data)
+  };
 
-  const data = formToJSON(form.elements);
-  // Demo only: print the form data onscreen as a formatted JSON object.
-  const dataContainer = document.getElementsByClassName('results__display')[0];
-  // Use `JSON.stringify()` to make the output human-readable JSON.
-  dataContainer.textContent = JSON.stringify(data, null, "  ");
-    // postAjax('windows.location.origin', data, function(data){ console.log(data); });
+  const handleFormSubmitQueue = (form) =>{
+    event.preventDefault()
+    const data = formToJSON(form.elements)
+    data.value = parseInt(data.value)
+    url = "http://192.168.0.29:5000/queue"
+      make_request(url, data)
+  };
+
+  const handleFormSubmitSemaphore = (form) =>{
+    event.preventDefault()
+    const data = formToJSON(form.elements)
+    data.index=parseInt(data.index, 10)
+    url = "http://192.168.0.29:5000/semaphore"
+      make_request(url, data)
+  };
+
+function make_request(url, data) {
+    const dataContainer = document.getElementsByClassName('results__display')[0];
+    dataContainer.textContent = JSON.stringify(data, null, "  ");
+    console.log();
+
     $.ajax({
         type:'POST',
-        url:'windows.location.orgin',
-        data: data,
-        dataType: 'json',
+        url:url,
+        //dataType: 'json',
+        data:JSON.stringify(data),
+        //data: data,
+        contentType: "application/json",
         sucess: function(data){alert(data);},
         failure: function(errMsg){alert(errMsg);
         }
     });
-};
-
-
-
-
+  
+}
 const task = document.getElementsByClassName('task')[0];
 const timer = document.getElementsByClassName('timer')[0];
-const queue1 = document.getElementsByClassName('queue1')[0];
-//console.log(queue1);
-task.addEventListener('submit', function () {handleFormSubmit(task);});
-timer.addEventListener('submit', function () {handleFormSubmit(timer);});
-queue1.addEventListener('submit', function () {handleFormSubmit(queue1);});
+const queue = document.getElementsByClassName('queue')[0];
+const semaphore = document.getElementsByClassName('semaphore')[0];
+
+task.addEventListener('submit', function () {handleFormSubmitTask(task);});
+timer.addEventListener('submit', function () {handleFormSubmitTimer(timer);});
+queue.addEventListener('submit', function () {handleFormSubmitQueue(queue);});
+semaphore.addEventListener('submit', function () {handleFormSubmitSemaphore(semaphore);});
 
 var term = new Terminal();
 term.open(document.getElementById('terminal'));
-setInterval(() => {term.write('\n\rHello from \033[1;3;31mxterm.js\033[0m $ ')}, 1000)
-
-
-
-  

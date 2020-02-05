@@ -18,12 +18,12 @@
 
   <nav>
     <ul id="navbar" class="nav">
-      <li><a href="#parameters" ">Parameters </a></li>
-        <li><a href = " #help">Help</a></li>
+      <li><a href="#parameters">Parameters </a></li>
+      <li><a href="#terminal">Terminal</a></li>
+      <li><a href ="#help">Help</a></li>
       <li><a href="#about">About</a></li>
     </ul>
   </nav>
-
 
   <div class="container" id="about">
     <div class="row">
@@ -44,8 +44,8 @@
         <form class="task">
           <h2>Task</h2>
           <div class="number_task">
-            <label for="select_task">Number of task</label>
-            <select id="select_task" type="radio" name="number_of_task">
+            <label for="index">Number of task</label>
+            <select id="index" type="radio" name="index">
               <option value="">Select task number...</option>
               <option value="1" name="task_nr">1</option>
               <option value="2" name="task_nr">2</option>
@@ -70,8 +70,8 @@
           </select>
           <label for="period">Period</label>
           <input type="text" name="period" placeholder="Period">
-          <label for="select_semaphore">Semaphore </label>
-          <select name="select_semaphore" placeholder="Select ID of semaphore to change for timer...">
+          <label for="semaphore">Semaphore </label>
+          <select name="semaphore" placeholder="Select ID of semaphore to change for timer...">
             <option value="">Select ID of semaphore for timer...</option>
             <option value="1">1</option>
             <option value="2">2</option>
@@ -86,11 +86,27 @@
       </div>
 
       <div class="col-sm-4" id="queue">
-        <form class="queue1">
+        <form class="queue">
           <h2>Queue</h2>
-          <label for="value_q">Value</label>
-          <input type="text" name="value_q" placeholder="Put value to queue">
+          <label for="value">Value</label>
+          <input type="number" name="value" placeholder="Put value to queue">
           <button type="submit" id="submit">Set</button>
+        </form>
+
+        <form class="semaphore">
+          <h2>Semaphore</h2><br>
+          <!-- <label for="select_semaphore">Semaphore </label> -->
+          <select name="index" placeholder="Select ID of semaphore to change for timer...">
+            <option value="">Select ID of semaphore for timer...</option>
+            <option type=integer value=1>1</option>
+            <option value=2>2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+          </select>
+          <button type="submit" id="submit">Give</button>
         </form>
       </div>
     </div>
@@ -123,6 +139,63 @@
       <div class="col-sm-12" id="help">
         <div id="help">
           <h1>Help</h1>
+          <h3>Task</h3>
+          <p1>There are 3 Tasks defined for purpose of experimenting: <code>myTask02</code> , <code>myTask03</code>,<code>myTask04</code> . On start, each tasks turns on LED assigned to it. On exit, it turns off the diode. There is Task defined for purpose of communication: uartRX. It have the highest priority.</p1>
+          <h3>Semaphores</h3>
+          <p1>3 Semaphores are defined. Each Semaphore triggers each Task.</p1>
+          <table class="table">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">Semaphore</th>
+                <th scope="col">Task Trigerred</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>MyBinarySem01</td>
+                <td>MyTask02</td>
+              </tr>
+              <tr>
+                <td>MyBinarySem02</td>
+                <td>MyTask03</td>
+              </tr>
+              <tr>
+                <td>MyBinarySem02</td>
+                <td>MyTask04</td>
+              </tr>
+            </tbody>
+          </table>
+          <p1>Sempahore code is passed do gs command to give specific group of semaphores. Please refer to table below.</p1>
+          
+          <table class="table">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">Semaphore Code</th>
+                <th scope="col">Semaphores given</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>MyBinarySem01</td>
+                <td>MyTask02</td>
+              </tr>
+              <tr>
+                <td>MyBinarySem02</td>
+                <td>MyTask03</td>
+              </tr>
+              <tr>
+                <td>MyBinarySem02</td>
+                <td>MyTask04</td>
+              </tr>
+            </tbody>
+          </table>
+          <p1>Task uartRX is triggered via semaphore uartRX.<br>         
+          uartRX sempahore is set in UART Rx interrupt when there '\n' char detected.</p1>
+          <h3>Queue</h3>
+          <h3>Software timers</h3>
+          <h3>Parameters</h3>
+          <h3>LED connection</h3>
+          <p1>Diode's cathodes should be connected to ground, while anodes to respective pins. Remember about current limiting resistor! | Task No | STM32 pin number | | - | - | | 1 | User diode / PA6 | | 2 | PB6 | | 3 | PA9 |</p1>
         </div>
       </div>
     </div>

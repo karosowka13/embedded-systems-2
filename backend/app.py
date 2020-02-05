@@ -17,6 +17,8 @@ async def uart_conn(app):
     await app["uart"].close()
 
 
+# it may be better to create polling task only when there's one client and cancel it when there's no client at all
+# however current implementation is simpler
 async def poll_uart(app):
     async def read_uart(uart, websockets):
         while True:

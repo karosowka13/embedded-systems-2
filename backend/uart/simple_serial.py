@@ -41,7 +41,7 @@ class Serial:
             ret = await self._reader.readline().decode("ascii")
             logger.debug(f"Received message {ret!r}")
             return ret
-        return ""
+        return "0"
 
     async def read(self, end="\n"):
         if self._reader is not None:

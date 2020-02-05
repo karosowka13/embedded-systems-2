@@ -15,9 +15,9 @@ class UART(Serial):
         rc = 0
         logger.debug(f"Managing Task {idx}: priority {priority} and duration {duration}")
         if priority is not None:
-            rc += int(await self.read(f"cpt{idx} {priority}"))
+            rc += int(await self.write_read(f"cpt{idx} {priority}"))
         if duration is not None:
-            rc += int(await self.read(f"cdt{idx} {duration}"))
+            rc += int(await self.write_read(f"cdt{idx} {duration}"))
         return rc
 
     async def manage_timer(self, args):
@@ -32,9 +32,9 @@ class UART(Serial):
             else:
                 self.write("sto_t")
         if period is not None:
-            rc += int(await self.read(f"tp {period}"))
+            rc += int(await self.write_read(f"tp {period}"))
         if semaphore is not None:
-            rc += int(await self.read(f"tc {semaphore}"))
+            rc += int(await self.write_read(f"tc {semaphore}"))
         return rc
 
     async def queue_put(self, args):
@@ -42,7 +42,7 @@ class UART(Serial):
         logger.debug(f"Putting value {value} to queue")
         rc = 0
         if value is not None:
-            rc += int(await self.read(f"pq {value}"))
+            rc += int(await self.write_read(f"pq {value}"))
         return rc
 
     async def give_semaphore(self, args):
@@ -50,7 +50,7 @@ class UART(Serial):
         logger.debug(f"Giving semaphore of index {idx}")
         rc = 0
         if idx is not None:
-            rc += int(await self.read(f"gs {idx}"))
+            rc += int(await self.write_read(f"gs {idx}"))
         return rc
 
     async def read_data(self):

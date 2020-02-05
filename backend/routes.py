@@ -81,8 +81,6 @@ async def websocket(request):
                     logger.debug("Web socket closed")
             elif msg.type == WSMsgType.ERROR:
                 logger.error(f"Web socket connection closed with exception: {ws.exception()}")
-            else:
-                logger.debug("Dupsko")
         except Exception as e:
             logger.error(f"Exception in websocket handler: {e}")
     return ws

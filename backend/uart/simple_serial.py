@@ -8,12 +8,13 @@ logger = logging.getLogger(__name__)
 
 class Serial:
 
-    def __init__(self, port, speed=9600, debug=False):
+    def __init__(self, port, speed=9600, debug=False, queue=None):
         self.port = port
         self.speed = speed
         self.debug = debug
         self._reader = None
         self._writer = None
+        self.q = queue
 
     async def open(self):
         if not self.debug:
@@ -45,7 +46,7 @@ class Serial:
     async def read(self):
         if self._reader is not None:
             ret = await self._reader.readline()
-            ret.decode("ascii")
+            ret = ret.decode("ascii")
             logger.debug(f"Received message {ret!r}")
             return ret
-        return "\n"
+        return "0"

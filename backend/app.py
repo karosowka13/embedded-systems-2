@@ -20,6 +20,7 @@ async def uart_conn(app):
         config.SERIAL_PORT,
         speed=config.SERIAL_SPEED,
         debug=config.APP_DEBUG,
+        queue=app["queue"]
     )
     await app["uart"].open()
     yield
@@ -29,24 +30,27 @@ async def uart_conn(app):
 # it may be better to create polling task only when there's one client and cancel it when there's no client at all
 # however current implementation is simpler
 async def poll_uart(app):
-    async def read_uart(uart, websocket):
+    async def read_uart(app):
         while True:
             try:
-                # await asyncio.sleep(1)
-                ret = await uart.read()
-                if websocket is not None:
-                    await websocket.send_str(ret)
+                ret = await app["uart"].read()
+                ret = int(ret)
+                if ret < 20:
+                    await app["uart"].q.put(ret)
+                if app["websocket"] is not None:
+                    await app["websocket"].send_str(str(ret))
             except Exception as e:
                 logger.error(f"Exception when reading uart: {e}")
-    app["uart_poller"] = asyncio.create_task(read_uart(app["uart"], app["websocket"]))
+    task = asyncio.create_task(read_uart(app))
     yield
-    app["uart_poller"].cancel()
-    await app["uart_poller"]
+    task.cancel()
+    await task
 
 app = web.Application(debug=config.APP_DEBUG)
 app["port"] = config.APP_PORT
 app["host"] = config.APP_HOST
 app["websocket"] = None
+app["queue"] = asyncio.Queue()
 
 app.cleanup_ctx.append(uart_conn)
 app.cleanup_ctx.append(poll_uart)

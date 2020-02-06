@@ -34,6 +34,13 @@ Try to think why this features was implemented and what are possible aplacations
 <p>Please find IP adress of RPi using <a href="https://www.wireshark.org/">Wireshark</a>.
 Visit type IP of RPi in browser to use application.</p>
 <h3 id="steps">Steps</h3>
+<p>Set Timer to following properties in UI:</p>
+<ul>
+<li>running: true</li>
+<li>period: 1000</li>
+<li>semaphore_given: 1</li>
+</ul>
+<p>Observe diode blinking with frequency 1 Hz.</p>
 <h2 id="the-how-part">The 'HOW' part</h2>
 <p>In this part your will learn how to use FreeRTOS API to program <code>Software Timer</code> functionality.</p>
 <h3 id="prequisites">Prequisites</h3>

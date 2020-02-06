@@ -25,15 +25,7 @@ In one moment only one task is executed. So what are the others statuses?
 
 Now you can consider how tasks are changed and how often operating system verify wheter the change of the context is needed. Everything is happening because of System Tick. Frequency of the System Tick is much more lower in comparision with frequency of processor clock. The time is configured manually via macro configTICK_RATE_HZ in configuation file. 
 
-```c
- BaseType_t xTaskCreate( TaskFunction_t pvTaskCode,
-                         const char * const pcName,
-                         unsigned short usStackDepth,
-                         void *pvParameters,
-                         UBaseType_t uxPriority,
-                         TaskHandle_t *pxCreatedTask
-                        );
-```
+
 ## FreeRTOS API Details
 
 **xTaskCreate()**: This interface is used to create a new Task, if the task is successfully created then it returns pdPass(1) or else errCOULD_NOT_ALLOCATE_REQUIRED_MEMORY(-1). 
@@ -45,7 +37,15 @@ For this we need to pass the handle of the task and new priority to vTaskPriorit
 
 **vTaskPriorityGet()**: This function is used to get the priority of a task.
 For this, we need to pass the handle of the task and it will return the task. 
-
+```c
+ BaseType_t xTaskCreate( TaskFunction_t pvTaskCode,
+                         const char * const pcName,
+                         unsigned short usStackDepth,
+                         void *pvParameters,
+                         UBaseType_t uxPriority,
+                         TaskHandle_t *pxCreatedTask
+                        );
+```
 # To do 
 
 ### Prequisites

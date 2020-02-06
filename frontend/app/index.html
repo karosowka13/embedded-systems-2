@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>
+    FreeRTOS demoboard
+  </title>
+  <link rel="stylesheet" href="../style/normalize.css">
+  <link rel="stylesheet" href="../style/bootstrap-grid.css">
+  <link rel="stylesheet" href="../style/style.css">
+  <link rel="stylesheet" href="xterm.css" />
+  <script src="xterm.js"></script>
+  <script src="addons/fit/fit.js"></script>
+</head>
+
+<body>
+
+  <nav>
+    <ul id="navbar" class="nav">
+      <li><a href="#parameters">Parameters </a></li>
+      <li><a href="#terminal">Terminal</a></li>
+      <li><a href ="#help">Help</a></li>
+      <li><a href="#about">About</a></li>
+    </ul>
+  </nav>
+
+  <div class="container" id="about">
+    <div class="row">
+      <div class="col-sm-4"><img src="../../img/logo.jpg" alt="logo" class="logo"></div>
+      <div class="col-sm-8" id="section_about">
+        <div>
+          <h1>About</h1>
+        </div>
+        <p>This is quick programe with basic features of FreeRTOS. You can change parameters in order to see impact on
+          system (i.e. change priority of task of semaphore given by timer). Insight to system is provided by UART and
+          diodies indicating execution of tasks. Try it!</p>
+      </div>
+    </div>
+
+    <div class="row" id="parameters">
+      <h1>Parameters</h1>
+      <div class="col-sm-4">
+        <form class="task">
+          <h2>Task</h2>
+          <div class="number_task">
+            <label for="index">Number of task</label>
+            <select id="index" type="radio" name="index">
+              <option value="">Select task number...</option>
+              <option value="1" name="task_nr">1</option>
+              <option value="2" name="task_nr">2</option>
+              <option value="3" name="task_nr">3</option>
+            </select>
+          </div>
+          <label for="duration">Duration of task</label>
+          <input type="number" min="200" id="duration" name="duration" placeholder="Duration">
+          <label for="priority">Priority of task</label>
+          <input type="number" min="2" max="40" id="priority" name="priority" placeholder="Priority">
+          <button type="submit" id="submit">Set</button>
+        </form>
+      </div>
+
+      <div class="col-md-4" id="timer">
+        <form class="timer">
+          <h2>Timer</h2>
+          <label for="running">Running </label>
+          <select name="running" id="running">
+            <option value="true">True</option>
+            <option value="false">False</option>
+          </select>
+          <label for="period">Period</label>
+          <input type="number" min="500" max="5000" name="period" placeholder="Period">
+          <label for="semaphore">Semaphore </label>
+          <select name="semaphore" placeholder="Select ID of semaphore to change for timer...">
+            <option value="">Select ID of semaphore for timer...</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+          </select>
+          <button type="submit" id="submit">Set</button>
+        </form>
+      </div>
+
+      <div class="col-sm-4" id="queue">
+        <form class="queue">
+          <h2>Queue</h2>
+          <label for="value">Value</label>
+          <input type="number" min="20" max="1000" name="value" placeholder="Put value >20 to queue">
+          <button type="submit" id="submit">Set</button>
+        </form><br>
+
+        <form class="semaphore">
+          <br><h2 id="semaphore_css">Semaphore</h2>
+          <!-- <label for="select_semaphore">Semaphore </label> -->
+          <select name="index" placeholder="Select ID of semaphore to change for timer...">
+            <option value="">Select ID of semaphore for timer...</option>
+            <option type=integer value=1>1</option>
+            <option value=2>2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+          </select>
+          <button type="submit" id="submit">Give</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="terminal"></div>
+
+
+
+
+    <div class="row">
+      <div class="col-sm-12" id="help">
+        <div id="help">
+          <h2>Help</h2>
+          <ul class="list">
+            <li>Set duration (min.200), priority(in range 2-40) of each Task</li>
+            <li>Give Semaphore</li>
+            <li>Put value(in range 20-1000) to Queue</li>
+            <li>Start, stop and change period (500-5000) of software Timer</li>
+            <li>Change Semphore given by Timer</li>
+          </ul> 
+       </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12" id="form_data">
+        <h2 class="results__heading">Form Data</h2>
+        <pre class="results__display-wrapper"><code class="results__display"></code></pre>
+      </div>
+    </div>
+    
+    <script src="../jquery-3.4.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="app.js"></script>
+
+
+  </div>
+</body>
+
+</html>

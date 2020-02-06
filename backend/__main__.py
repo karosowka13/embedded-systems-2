@@ -1,3 +1,7 @@
+import logging
+from aiohttp import web
 from .app import app
 
-app.run(port=app.config["APP_PORT"], host=app.config["APP_HOST"], debug=app.config["APP_DEBUG"])
+
+logging.basicConfig(level=logging.DEBUG)
+web.run_app(app, port=app["port"], host=app["host"])

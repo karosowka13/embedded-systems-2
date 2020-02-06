@@ -13,7 +13,7 @@ async def main(port, speed):
     try:
         while True:
             msg = input(">>>")
-            ret = s.write(msg.ljust(12))
+            ret = await s.write_read(msg.ljust(12))
             if ret is not None:
                 print(f"Return message: {ret!r}")
     except KeyboardInterrupt:

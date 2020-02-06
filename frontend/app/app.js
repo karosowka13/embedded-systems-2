@@ -53,7 +53,7 @@ const handleFormSubmitTask = (form) =>{
   if (data.priority) {
       data.priority = parseInt(data.priority)
   }
-  url = "http://192.168.0.29:5000/task"
+  url = "http://192.168.43.128:5000/task"
     make_request(url, data)
 };
 
@@ -68,7 +68,7 @@ const handleFormSubmitTimer = (form) =>{
     if (data.semaphore){
         data.semaphore = parseInt(data.semaphore)
     }
-    url = "http://192.168.0.29:5000/timer"
+    url = "http://192.168.43.128:5000/timer"
       make_request(url, data)
   };
 
@@ -76,7 +76,7 @@ const handleFormSubmitTimer = (form) =>{
     event.preventDefault()
     const data = formToJSON(form.elements)
     data.value = parseInt(data.value)
-    url = "http://192.168.0.29:5000/queue"
+    url = "http://192.168.43.128:5000/queue"
       make_request(url, data)
   };
 
@@ -84,7 +84,7 @@ const handleFormSubmitTimer = (form) =>{
     event.preventDefault()
     const data = formToJSON(form.elements)
     data.index=parseInt(data.index, 10)
-    url = "http://192.168.0.29:5000/semaphore"
+    url = "http://192.168.43.128:5000/semaphore"
       make_request(url, data)
   };
 
@@ -119,7 +119,7 @@ semaphore.addEventListener('submit', function () {handleFormSubmitSemaphore(sema
 var term = new Terminal();
 term.open(document.getElementById('terminal'));
 term.write("\r FreeRTOS-board $")
-var socket = new WebSocket("ws://192.168.0.29:5000/ws")
+var socket = new WebSocket("ws://192.168.43.128:5000/ws")
 socket.onmessage = function (event) {
     if (event.data){
         console.log(event.data);

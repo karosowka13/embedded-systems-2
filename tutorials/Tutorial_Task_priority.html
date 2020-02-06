@@ -39,6 +39,14 @@ As you can see context switching required numerous activities from processor and
 </ul>
 <h2 id="programme">Programme</h2>
 <p>Now you can consider how tasks are changed and how often operating system verify wheter the change of the context is needed. Everything is happening because of System Tick. Frequency of the System Tick is much more lower in comparision with frequency of processor clock. The time is configured manually via macro configTICK_RATE_HZ in configuation file.</p>
+
+<h2 id="freertos-api-details">FreeRTOS API Details</h2>
+<p><strong>xTaskCreate()</strong>: This interface is used to create a new Task, if the task is successfully created then it returns pdPass(1) or else errCOULD_NOT_ALLOCATE_REQUIRED_MEMORY(-1).</p>
+<p><strong>vTaskDelay()</strong>: This function is used to delay/block the task for specified delay time(ticks). INCLUDE_vTaskDelay needs to be set to 1 in FreeRtosConfig.h file for using this function.</p>
+<p><strong>vTaskPrioritySet()</strong>: This function is used to change/Set the priority of a task.
+For this we need to pass the handle of the task and new priority to vTaskPrioritySet() function.</p>
+<p><strong>vTaskPriorityGet()</strong>: This function is used to get the priority of a task.
+For this, we need to pass the handle of the task and it will return the task.</p>
 <pre><code class="language-c"><div> <span class="hljs-function">BaseType_t <span class="hljs-title">xTaskCreate</span><span class="hljs-params">( TaskFunction_t pvTaskCode,
                          <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> * <span class="hljs-keyword">const</span> pcName,
                          <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">short</span> usStackDepth,
@@ -47,13 +55,6 @@ As you can see context switching required numerous activities from processor and
                          TaskHandle_t *pxCreatedTask
                         )</span></span>;
 </div></code></pre>
-<h2 id="freertos-api-details">FreeRTOS API Details</h2>
-<p><strong>xTaskCreate()</strong>: This interface is used to create a new Task, if the task is successfully created then it returns pdPass(1) or else errCOULD_NOT_ALLOCATE_REQUIRED_MEMORY(-1).</p>
-<p><strong>vTaskDelay()</strong>: This function is used to delay/block the task for specified delay time(ticks). INCLUDE_vTaskDelay needs to be set to 1 in FreeRtosConfig.h file for using this function.</p>
-<p><strong>vTaskPrioritySet()</strong>: This function is used to change/Set the priority of a task.
-For this we need to pass the handle of the task and new priority to vTaskPrioritySet() function.</p>
-<p><strong>vTaskPriorityGet()</strong>: This function is used to get the priority of a task.
-For this, we need to pass the handle of the task and it will return the task.</p>
 <h1 id="to-do">To do</h1>
 <h3 id="prequisites">Prequisites</h3>
 <ul>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>`Timer` - FreeRTOS</title>
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+        
+        <style>
+.task-list-item { list-style-type: none; } .task-list-item-checkbox { margin-left: -20px; vertical-align: middle; }
+</style>
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        
+        
+    </head>
+    <body class="vscode-light">
+        <h1 id="timer---freertos"><code>Timer</code> - FreeRTOS</h1>
+<p>Ih this tutorial you will learn about <a href="http://www.keil.com/pack/doc/CMSIS_Dev/RTOS2/html/group__CMSIS__RTOS__TimerMgmt.html">Software Timers</a> in FreeRTOS.</p>
+<h2 id="the-why-part">The 'WHY' part</h2>
+<p>In this part you will observe how <code>Software Times</code> impacts behaviour of FreeRTOS.
+Try to think why this features was implemented and what are possible aplacations.</p>
+<h3 id="prequisities">Prequisities</h3>
+<ul>
+<li>demo board</li>
+</ul>
+<h3 id="setup">Setup</h3>
+<p>Please find IP adress of RPi using <a href="https://www.wireshark.org/">Wireshark</a>.
+Visit type IP of RPi in browser to use application.</p>
+<h3 id="steps">Steps</h3>
+<h2 id="the-how-part">The 'HOW' part</h2>
+<p>In this part your will learn how to use FreeRTOS API to program <code>Software Timer</code> functionality.</p>
+<h3 id="prequisites">Prequisites</h3>
+<ul>
+<li>STM32F303RE nucleo board</li>
+<li><a href="https://www.st.com/en/development-tools/stm32cubeide.html">CubeIDE</a> v1.1.0 or higher</li>
+<li><a href="foo.com">Base project</a> downloaded</li>
+</ul>
+<p>Please open <code>base-project</code>. Variables neccessary for Timer are already declared. We will use <a href="http://www.keil.com/pack/doc/CMSIS_Dev/RTOS2/html/group__CMSIS__RTOS__TimerMgmt.html#gab6ee2859ea657641b7adfac599b8121d">osTimerStart</a> function in order to start Timer:</p>
+<pre><code class="language-c"><div><span class="hljs-comment">/* USER CODE BEGIN PD */</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> TIMER_PERIOD 1000</span>
+<span class="hljs-comment">/* USER CODE END PD */</span>
+</div></code></pre>
+<pre><code class="language-c"><div><span class="hljs-comment">/* USER CODE BEGIN RTOS_TIMERS */</span>
+<span class="hljs-comment">/* start timers, add new ones, ... */</span>
+osTimerStart(myTimer01Handle, TIMER_PERIOD);
+<span class="hljs-comment">/* USER CODE END RTOS_TIMERS */</span>
+</div></code></pre>
+<p>Next, we want to <a href="https://www.keil.com/pack/doc/CMSIS/RTOS2/html/group__CMSIS__RTOS__SemaphoreMgmt.html#ga0abcee1b5449d7a6928fb9248c690bb6">release</a> semaphore in order to trigger Task01.</p>
+<pre><code class="language-c"><div><span class="hljs-comment">/* USER CODE BEGIN Callback01 */</span>
+osSemaphoreRelease(myBinarySem01Handle);
+<span class="hljs-comment">/* USER CODE END Callback01 */</span>
+</div></code></pre>
+<p>In the task02 we want to <a href="https://www.keil.com/pack/doc/CMSIS/RTOS2/html/group__CMSIS__RTOS__SemaphoreMgmt.html#ga7e94c8b242a0c81f2cc79ec22895c87b">acquire</a> semaphore - the task will be trigger by this semaphore. Please note that one can specify wait time for acquiring semaphore.
+We also call functions to switch diodes in order to indicate task execution time.
+<code>osDelay</code> represents any function that is computationally expensive. We call it to see diode switching.</p>
+<pre><code class="language-c"><div><span class="hljs-comment">/* USER CODE BEGIN StartTask02 */</span>
+<span class="hljs-comment">/* Infinite loop */</span>
+<span class="hljs-keyword">for</span>(;;)
+{
+    osSemaphoreAcquire(myBinarySem01Handle, osWaitForever);
+    LED_turn_on(LED1);
+    osDelay(<span class="hljs-number">500</span>);
+    LED_turn_off(LED1);
+}
+<span class="hljs-comment">/* USER CODE END StartTask02 */</span>
+</div></code></pre>
+<p>Now compile project and load it onto boards.</p>
+<h3 id="expected-results">Expected results</h3>
+<p>Diode should blink with 1s period and 50% duty.</p>
+
+    </body>
+    </html>

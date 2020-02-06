@@ -1,4 +1,4 @@
-# `foo` - FreeRTOS
+# `Timer` - FreeRTOS
 Ih this tutorial you will learn about [Software Timers](http://www.keil.com/pack/doc/CMSIS_Dev/RTOS2/html/group__CMSIS__RTOS__TimerMgmt.html) in FreeRTOS.
 
 ## The 'WHY' part
